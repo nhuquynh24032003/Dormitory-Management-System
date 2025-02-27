@@ -1,0 +1,388 @@
+﻿
+@{
+    ViewBag.Title = "SuaBaiViet";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" rel="stylesheet">
+<link href="~/Areas/admin/Content/CSS/GiaoVien.css" rel="stylesheet">
+
+<div class='container_body_name_input_'>
+    <label class='label_name_modifier base_label_inline'>Tựa đề bài post</label>
+    <input type='text' value="@ViewBag.PostInfo.PostTitle" class='name_input_modifier secondary_input post_tittle_place' />
+</div>
+<div class='container_body_address_input_'>
+    <label class='label_name_modifier base_label_inline'>Meta</label>
+    <input type='text' value="@ViewBag.PostInfo.Meta" class='name_input_modifier secondary_input meta_place' />
+</div>
+<div class='container_body_address_input_' style="display:flex;align-items:center">
+    <label class='label_name_modifier base_label_inline' style="margin-right:24px;">Ảnh bìa</label>
+    <label for="cover_image_upload">
+        <img src="~/Content/upload/img/news/@ViewBag.PostInfo.PostImage" class="img_update" style="width: 200px; height: 200px; padding: 20px; margin: auto" />
+    </label>
+    <input type="file" id="cover_image_upload" accept=".png,.jpg,.jpeg" style="outline:none;border:none;width:200px;height:200px;display:none" />
+</div>
+<script>
+    const fileUpload = document.querySelector("#cover_image_upload");
+    fileUpload.addEventListener("change", (event) => {
+        // Lấy thông tin tập tin được đăng tải
+        const files = event.target.files;
+        const reader = new FileReader();
+        // Đọc thông tin tập tin đã được đăng tải
+        reader.readAsDataURL(files[0]);
+        // Lắng nghe quá trình đọc tập tin hoàn thành
+        reader.addEventListener("load", (event) => {
+            document.querySelector(".img_update").src = `${reader.result}`;
+        });
+    });
+</script>
+<div class='container_body_address_input_'>
+    <label class='label_address_modifier base_label_inline'>Tag bài post</label>
+    <span id="tagContainer"></span>
+
+    <!-- Colored mini FAB button -->
+    <button data-bs-target="#ModalChooseCategory" data-bs-toggle="modal" data-bs-dismiss="modal"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+            style="background-color: #35d66c">
+        <i class="fa-solid fa-plus" style="margin: 10px"></i>
+    </button>
+</div>
+<script src="~/Areas/admin/Content/ckfinder/ckfinder.js"></script>
+<script src="~/Areas/admin/Content/ckeditor/ckeditor.js"></script>
+
+<label class='label_address_modifier base_label_inline' style="width:100%;text-align:center;margin-bottom:24px">Nội dung bài post</label>
+
+<textarea id="editor1" class="ckeditor"></textarea>
+<div class="upload-container" style="width:100%;text-align:right">
+    <button class="primary-btn submit_btn" style="margin-top: 24px; margin-right: 24px"> Đăng</button>
+</div>
+
+
+<div class="modal fade"
+     id="ModalChooseCategory"
+     tabindex="-1"
+     aria-labelledby="ModalAddUserLable"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xs">
+        <div class="modal-content p-3">
+            <div class="modal-body">
+                <ul class="Category_Containter">
+                </ul>
+                <div class="button_container">
+                    <button class="primary-btn" style="margin-top: 24px; margin-right: 24px" data-bs-target="#ModalAddingCategory" data-bs-toggle="modal" data-bs-dismiss="modal"> Thêm thể loại </button>
+                    <button class="primary-btn" style="width:150px;margin-top: 24px; margin-right: 24px" onclick="getCheckedCategorySpans()"> Chọn xong thể loại </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function formatKeywordsForSEO(inputArray) {
+        // Process each element in the input array to remove whitespace and format
+        let formattedKeywords = inputArray.map(keyword => {
+            // Remove diacritics and convert to lowercase
+            let normalizedKeyword = removeDiacritics(keyword).toLowerCase();
+
+            // Replace spaces within the normalized keyword with an empty string
+            let formattedKeyword = normalizedKeyword.replace(/\s+/g, '').replace(/đ/gi, 'd');;
+
+            // Return the formatted keyword
+            return formattedKeyword;
+        });
+
+        // Join the formatted keywords with a semicolon to form the final output string
+        let finalOutput = formattedKeywords.join(';');
+
+        return finalOutput;
+    }
+
+    // Function to remove Vietnamese diacritics
+    function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    function updateMetaForCategory(categoryNameGet) {
+        const postName = $(".post_tittle_place").val() != "" ? $(".post_tittle_place").val() : "";
+        let tempPostArr = []
+        tempPostArr.push(postName);
+        let newFormatPost = formatKeywordsForSEO(tempPostArr)
+        const newMeta = `/${newFormatPost}`;
+        // Set the value of meta input field
+        $(".meta_place").val(newMeta);
+    }
+    function updateMeta(categoryNameGet) {
+        let categoryString = formatKeywordsForSEO(categoryNameGet)
+        const postName = $(".post_tittle_place").val() == "" ? $(".post_tittle_place").val() : "";
+        const newMeta = `${categoryString}/${postName}`;
+        // Set the value of meta input field
+        $(".meta_place").val(newMeta);
+    }
+    const categoryNameGet = []
+    function getCheckedCategorySpans() {
+        // Select all category checkboxes within the container
+        const checkboxes = document.querySelectorAll('.Category_Containter .category-checkbox');
+
+        // Array to store HTML of checked category spans
+        const checkedCategorySpans = [];
+
+        // Iterate over each checkbox
+        checkboxes.forEach((checkbox) => {
+            console.log(checkbox.checked)
+            // Check if the checkbox is checked
+            if (checkbox.checked) {
+                // Get the sibling <span> element (category span) of the checked checkbox
+                const categorySpan = checkbox.parentElement.querySelector('span');
+                categoryNameGet.push(categorySpan.textContent);
+                // Push the HTML of the category span into the array
+                if (categorySpan) {
+                    checkedCategorySpans.push(categorySpan.outerHTML);
+                }
+            }
+        });
+        const allHTMLS = checkedCategorySpans.join("");
+        $("#tagContainer").html(allHTMLS);
+        $('#ModalChooseCategory').modal('hide');
+        updateMetaForCategory(categoryNameGet);
+    }
+    $(".post_tittle_place").keyup(() => {
+        updateMetaForCategory(categoryNameGet);
+    })
+</script>
+<div class="modal fade"
+     id="ModalAddingCategory"
+     tabindex="-1"
+     aria-labelledby="ModalAddUserLable"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xs">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="exampleModalFullscreenSmLabel">Thêm thể loại</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class='container_body_name_input_' style="margin-bottom: 12px; margin-left: 12px; margin-top: 12px;">
+                    <label class='label_name_modifier base_label_inline'>Tên thể loại</label>
+                    <input type='text' class='name_input_modifier secondary_input category_tittle_place' />
+                </div>
+                <div class="container_body_name_input_" style="margin-bottom:12px;margin-left:12px;margin-top:12px;">
+                    <label class='label_name_modifier base_label_inline'>Màu nền</label>
+                    <input type="color" class="color_place" style="width:100%" value="" />
+                    <div class="hex_value" style="text-align:right">
+                        <label class='label_name_modifier base_label_inline'>HEX:</label>
+                        <input type="text" class="secondary_input hex_value_place" style="width:10%" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button class="primary-btn adding_category_btn" style="margin-top: 24px; margin-right: 24px"> Thêm thể loại </button>
+                <button class="primary-btn" style="width:150px;margin-top: 24px; margin-right: 24px" data-bs-target="#ModalChooseCategory" data-bs-toggle="modal" data-bs-dismiss="modal"> Hủy </button>
+            </div>
+        </div>
+
+
+        <script>
+            $(".color_place").change((e) => {
+                $(".hex_value_place").val($(e.target).val());
+            });
+            $(".hex_value_place").change((e) => {
+                $(".color_place").val($(e.target).val());
+            })
+        </script>
+
+    </div>
+</div>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/PostAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/CategoryAPI.js")
+
+<script>
+
+    /*
+        public int IDCategory { get; set; }
+        public string CategoryName { get; set; }
+
+
+        public string ChipColor { get; set; }
+        */
+    const addingCategory = async () => {
+        const CategoryData = {
+            CategoryTitle: $(".category_tittle_place").val(),
+            ColorChip: $(".hex_value_place").val(),
+        }
+        await postCategory(CategoryData);
+        $('#ModalAddingCategory').modal('hide');
+        $('#ModalChooseCategory').modal('show');
+
+    }
+    $(".adding_category_btn").click(async () => {
+        await addingCategory();
+    })
+    function getOppositeColor(hexColor) {
+        // Remove '#' if present
+        hexColor = hexColor.replace('#', '');
+
+        // Convert hex to RGB
+        let r = parseInt(hexColor.substring(0, 2), 16);
+        let g = parseInt(hexColor.substring(2, 4), 16);
+        let b = parseInt(hexColor.substring(4, 6), 16);
+
+        // Calculate relative luminance (brightness)
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+        // Determine contrasting color based on luminance threshold
+        if (luminance > 0.5) {
+            return '#000000'; // Light background, return black
+        } else {
+            return '#FFFFFF'; // Dark background, return white
+        }
+    }
+
+
+    function handleCheckboxChange(event) {
+
+        const { id, checked } = event;
+        let storedIds = JSON.parse(sessionStorage.getItem('selectedIds') || '[]');
+
+        if (checked) {
+            storedIds.push(id); // Add ID to selectedIds array
+        } else {
+            storedIds = storedIds.filter(itemId => itemId !== id); // Remove ID from selectedIds array
+        }
+
+        sessionStorage.setItem('selectedIds', JSON.stringify(storedIds)); // Update sessionStorage
+    }
+    const renderCategory = async () => {
+        let CategoryData = await getAllCategory();
+        console.log(CategoryData);
+        let htmls = "";
+
+        CategoryData.forEach((item) => {
+            const oppositeColorForText = getOppositeColor(item.ColorChip);
+            htmls += `<li class="category-checkbox-parents" style="text-decoration:none;display:flex;align-items:center;margin:4px 0">
+                        <input onchange="handleCheckboxChange(this)" class="category-checkbox" type="checkbox" id=${item.IDCategory} />
+                        <span class="badge badge-pill badge-primary" style="color: ${oppositeColorForText};margin-left:12px;background-color:${item.ColorChip}" id=${item.IDCategory}>${item.CategoryTitle}</span>
+                    </li>`
+        })
+        $(".Category_Containter").append(htmls);
+
+    }
+
+
+    // Function to restore checkbox state from sessionStorage
+    async function restoreCheckboxState() {
+
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+        const storedIds = JSON.parse(sessionStorage.getItem('selectedIds') || '[]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = storedIds.includes(checkbox.id);
+        });
+    }
+    var ChoosingCategoryModal = document.getElementById('ModalChooseCategory')
+    ChoosingCategoryModal.addEventListener('shown.bs.modal', async function () {
+        $(".Category_Containter").html("");
+        await renderCategory();
+        restoreCheckboxState();
+    })
+    ChoosingCategoryModal.addEventListener('hide.bs.modal', function () {
+        $(".Category_Containter").html("");
+    })
+    function rgbToHex(rgbColor) {
+        // Parse RGB values from 'rgb(r, g, b)' string
+        const regex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/;
+        const match = rgbColor.match(regex);
+
+        if (!match) {
+            return null; // Invalid RGB color format
+        }
+
+        const r = parseInt(match[1]); // Red value
+        const g = parseInt(match[2]); // Green value
+        const b = parseInt(match[3]); // Blue value
+
+        // Convert RGB to hex color code
+        const hexR = r.toString(16).padStart(2, '0');
+        const hexG = g.toString(16).padStart(2, '0');
+        const hexB = b.toString(16).padStart(2, '0');
+
+        const hexColor = `#${hexR}${hexG}${hexB}`.toUpperCase(); // Hex color code
+
+        return hexColor;
+    }
+    $(document).ready(async () => {
+        const PostDetailInfo = "@Html.Raw(HttpUtility.JavaScriptStringEncode(ViewBag.PostInfo.PostDetail))";
+
+        CKEDITOR.instances["editor1"].setData(PostDetailInfo)
+        const CategoryInfo = JSON.parse('@Html.Raw(Json.Encode(@ViewBag.CategoryInfo))');
+        let NewCategoryInfo= CategoryInfo.map(String)
+        sessionStorage.setItem('selectedIds', JSON.stringify(NewCategoryInfo));
+        await renderCategory();
+        await restoreCheckboxState();
+        await getCheckedCategorySpans();
+    })
+    // Function to convert HTML spans to CategoryDTO objects with hex color
+    function convertSpansToCategoryDTO() {
+        const tagContainer = document.getElementById('tagContainer');
+        const spans = tagContainer.querySelectorAll('span');
+
+        const categoryDTOs = [];
+
+        spans.forEach((span) => {
+            const id = parseInt(span.getAttribute('id'));
+            const categoryName = span.textContent.trim();
+            const rgbColor = span.style.backgroundColor;
+
+            const chipColor = rgbToHex(rgbColor); // Convert RGB to hex code
+
+            if (chipColor) {
+                const categoryDTO = {
+                    IDCategory: id,
+                    CategoryName: categoryName,
+                    ChipColor: chipColor
+                };
+
+                categoryDTOs.push(categoryDTO);
+            }
+        });
+
+        return categoryDTOs;
+    }
+    var editor = CKEDITOR.replace("editor1", { height: '600px' });
+    customConfig: '~/Areas/admin/Content/ckeditor/config.js';
+
+    /*
+    public string PostTittle { get; set; }
+        public string PostDetail { get; set; }
+
+        public HttpPostedFileBase PostImage { get; set; }
+        public int IDAccount { get; set; }
+        public List<CategoryDTO> CategoryList { get; set; }
+
+    */
+    //CKEDITOR.instances.editor1.getData():Lay du lieu CKEditor
+
+    $(".submit_btn").click(async () => {
+        let PostImage;
+        if (!document.querySelector('#cover_image_upload').files[0]) {
+            PostImage = null;
+        }
+        else {
+            PostImage = $('#cover_image_upload')[0].files[0]
+        }
+        const CategoryList = convertSpansToCategoryDTO();
+        const PostDetail = {
+            PostTittle: $(".post_tittle_place").val(),
+            PostDetail: CKEDITOR.instances.editor1.getData(),
+            meta: $(".meta_place").val(),
+            PostImage: PostImage,
+            CategoryList: CategoryList,
+            IDAccount: JSON.parse(sessionStorage.getItem("IDAccount"))
+        }
+        var PostID=parseInt(@ViewBag.PostInfo.IDPost)
+        await putPost(PostID,PostDetail);
+        sessionStorage.setItem("Reload-Post","1");
+        document.location.href="@Url.Action("ReloadPost", "QuanLy")";
+    })
+</script>
+
+

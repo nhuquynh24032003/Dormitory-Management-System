@@ -1,0 +1,85 @@
+﻿
+
+@{
+    ViewBag.title = "Vi phạm";
+    Layout = "~/Views/Shared/layoutstudent.cshtml";
+}
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/MistakeAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH LỖI</h2>
+        </div>
+    </div>
+   
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr style="background-color: darkblue; color: white">
+                    <th scope="col">Mã lỗi</th>
+                    <th scope="col">Chi tiết lỗi</th>
+                    <th scope="col">Số giường</th>
+                    <th scope="col">Tên phòng</th>
+                    <th scope="col">Thời gian ghi nhận lỗi</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(async () => {
+            function formatDateTime(datetimeString) {
+                var dateTime = new Date(datetimeString);
+                var formattedDate = dateTime.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                var formattedTime = dateTime.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                return formattedDate + ' ' + formattedTime;
+            }
+            async function renderMistakeByStudent(MistakeDataToRender) {
+                let htmls = ``
+                let table = new DataTable('#datatableform');
+                table.clear();
+
+                MistakeDataToRender.forEach(async (mistake) => {
+                        let RoomInfo = await findRoomById(mistake.IDRoom);
+                    htmls = `
+                    <tr>
+                        <td>${mistake[`$id`]}</td>
+                        <td>${mistake.MistakeDes}</td>
+                        <td>${mistake.BedID}</td>
+                        <td>${RoomInfo.Name}</td>
+                        <td>${formatDateTime(mistake.TimeCaught)}</td>
+                    </tr>`; 
+                    table.row.add($(htmls).get(0));
+                    table.draw();
+                })
+                console.log(MistakeDataToRender)
+                
+            };
+            /*$('#datatableform').DataTable({
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });*/
+       
+            if (!sessionStorage.getItem("IDAccount")) {
+                window.location.href = "@Url.Action("DangNhapSinhVien", "TrangChu")"
+            }
+            else {
+                const IDAccount = sessionStorage.getItem("IDAccount")
+                let AccountInfo = await getAccountByID(IDAccount)
+                const IDSinhVien = AccountInfo.IDSinhVien
+                let MistakeInfo = await getMisTakesBySinhVienID(IDSinhVien);
+                renderMistakeByStudent(MistakeInfo)
+            }
+        })
+
+    </script>
+</div>
+
+

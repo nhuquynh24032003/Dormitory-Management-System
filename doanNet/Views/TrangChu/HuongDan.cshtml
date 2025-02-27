@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "HuongDan";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+<style>
+    .card {
+        transition: box-shadow 0.3s ease;
+    }
+    .card {
+        cursor: pointer;
+    }
+
+
+        .card:hover {
+            border: 1px solid #ced4da; /* Gray border color */
+            box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.3); /* Elevation effect */
+        }
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-full {
+        min-height: 100%;
+        background-color: lightgray;
+        padding-bottom: 300px;
+    }
+</style>
+
+
+<div class="container-full">
+    <div class="container" style="padding-top: 50px; padding-right: 50px; padding-left: 50px;">
+        <div class="row">
+            <h2>HƯỚNG DẪN</h2>
+            <hr style="border-top: 4px solid blue;">
+        </div>
+        <div class="row row-cols-5 g-4">
+            <div class="col">
+                <div class="card" style="display: flex; align-items: center; justify-content: center; height: 200px">
+                    <img src="~/Images/written-paper.png" class="card-img-top" style="width: 120px; height: 120px; padding: 20px">
+                    <div class="card-body">
+                        <p class="card-title" style="font-weight: bold; font-size: 15px; padding-bottom: 30px; text-align:center">Đăng ký nội trú</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="display: flex; align-items: center; justify-content: center; height: 200px">
+                    <img src="~/Images/parking.png" class="card-img-top" style="width: 120px; height: 120px; padding: 20px">
+                    <div class="card-body">
+                        <p class="card-title" style="font-weight: bold; font-size: 15px; padding-bottom: 30px; text-align:center">Gửi xe, Đổi xe, Chấm dứt HĐ xe</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="display: flex; align-items: center; justify-content: center; height: 200px">
+                    <img src="~/Images/contract.png" class="card-img-top" style="width: 120px; height: 120px; padding: 20px">
+                    <div class="card-body">
+                        <p class="card-title" style="font-weight: bold; font-size: 15px; padding-bottom: 30px; text-align: center;">Chấm dứt hộp đồng nội trú</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="display: flex; align-items: center; justify-content: center; height: 200px">
+                    <img src="~/Images/late.png" class="card-img-top" style="width: 120px; height: 120px; padding: 20px">
+                    <div class="card-body">
+                        <p class="card-title" style="font-weight: bold; font-size: 15px; padding-bottom: 30px; text-align: center">Xin về trễ sau giờ quy định (22h00)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" style="display: flex; align-items: center; justify-content: center; height: 200px">
+                    <img src="~/Images/stay-at-home.png" class="card-img-top" style="width: 120px; height: 120px; padding: 20px">
+                    <div class="card-body">
+                        <p class="card-title" style="font-weight: bold; font-size: 15px; padding-bottom: 30px; text-align: center">Tạm vắng - Tạm trú</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Các cột khác -->
+        </div>
+        </div>
+
+
+    </div>

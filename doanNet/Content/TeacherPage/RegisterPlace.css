@@ -1,0 +1,27 @@
+﻿body .display_place {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+body .title-content {
+  font-family: Arial, Helvetica, sans-serif;
+  border-bottom: solid 10px #A9CBFE;
+  padding-bottom: 12px;
+  margin: 12px;
+}
+body .display_row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  border-bottom: solid #D9D9D9 1px;
+  margin: 8px 0;
+}
+body .display_row .heading_tag {
+  margin: 0px;
+  width: 50%;
+  font-weight: 700;
+}
+body .display_row .content_tag {
+  margin: 0px;
+  width: 50%;
+}

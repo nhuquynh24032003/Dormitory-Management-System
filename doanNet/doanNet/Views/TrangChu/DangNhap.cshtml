@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "DangNhap";
+    Layout = "~/Views/Shared/layout3.cshtml";
+}
+<style>
+    .container-login {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 10px 20px 10px 20px;
+        border: 1px solid none;
+        border-radius: 0px;
+        background-color: deepskyblue
+    }
+
+    .image-container {
+        flex-shrink: 0;
+        margin-right: 20px;
+        border: 3px solid none;
+        border-radius: 10px;
+        background-color: white;
+        padding: 10px 20px 10px 20px;
+    }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+    .text-container {
+        flex-grow: 1;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+    }
+    .next-button {
+        float: left;
+        bottom: 20px;
+        right: 20px;
+        background-color: darkblue;
+        color: white;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<div class="container-fluid">
+    <div style="padding: 20px; background-color: darkblue; color: white; font-weight: bold">Đăng nhập ký túc xá</div>
+    <div class="container" style=" max-width: 600px; ">
+        <div class="container-login" onclick="location.href='@Url.Action("DangNhapGiaoVien", "TrangChu")';">
+            <div class="image-container">
+                <img src="~/Images/teacher.png" style="width:64px; height:auto">
+            </div>
+            <div class="text-container">
+                <p>Đăng nhập qua tài khoản Cán bộ</p>
+            </div>
+        </div>
+
+        <div class="container-login" onclick="location.href='@Url.Action("DangNhapSinhVien", "TrangChu")';">
+            <div class="image-container">
+                <img src="~/Images/student.png">
+            </div>
+            <div class="text-container">
+                <p>Đăng nhập qua tài khoản Sinh viên</p>
+            </div>
+        </div>
+        <a href="/TrangChu" class="btn next-button"><i class="fa-solid fa-arrow-left" style="padding-right: 20px"></i>Trang chủ</a>
+    </div>
+</div>
+

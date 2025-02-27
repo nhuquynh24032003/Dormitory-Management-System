@@ -1,0 +1,12 @@
+﻿@helper FormatDate(DateTime datetimeValue)
+{
+    string formattedDate = datetimeValue.ToString("dd-MM-yyyy"); // Format the date as "yyyy-MM-dd"
+
+    @formattedDate
+}
+@helper FormatVND(decimal amount)
+{
+    string formattedAmount = amount.ToString("#,##0") + " VNĐ";
+
+    @formattedAmount
+}

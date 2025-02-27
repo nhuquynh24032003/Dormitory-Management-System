@@ -1,0 +1,72 @@
+﻿@{
+    var menuItems = ViewBag.MenuItems;
+    var childItems = new List<doanNet.Models.Menu>();
+    var parentItems = new List<doanNet.Models.Menu>();
+
+    foreach (var item in menuItems)
+    {
+        if (item.FatherID == null)
+        {
+            parentItems.Add(item);
+        }
+        else
+        {
+            childItems.Add(item);
+        }
+    }
+}
+
+<style>
+    /* Custom CSS for hover effect */
+    .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+</style>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="~/Images/logo.png" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                @foreach (var parentItem in parentItems)
+                {
+                    if (parentItem.Hide == 1)
+                    {
+                        var children = childItems.Where(c => c.FatherID == parentItem.Order).ToList();
+
+                        if (children.Any())
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="@parentItem.Meta" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @parentItem.TextMenu
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @foreach (var child in children)
+                                    {
+                                        <li><a class="dropdown-item" href="@child.Meta">@child.TextMenu</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="@parentItem.Meta">@parentItem.TextMenu</a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+            <form class="d-flex">
+                <a href="/TrangChu/DangNhap" class="custom-button">Đăng nhập</a>
+            </form>
+        </div>
+    </div>
+</nav>

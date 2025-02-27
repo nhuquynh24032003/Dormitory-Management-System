@@ -1,0 +1,129 @@
+﻿@color_1: black;
+@color_2: #1C63EE;
+@color_3: #f8f8f8;
+@color_4: #333333;
+@color_5: #003c5f;
+@secondary_color_btn: #ffc3a0;
+@font_family_1: Arial, Helvetica, sans-serif;
+@font_family_2: 'Montserrat', sans-serif;
+@font_family_3: 'Geneva', sans-serif;
+@font_family_4: 'Geneva';
+@font_family_5: Montserrat;
+@background_color_1: transparent;
+@background_color_2: white;
+@primary_background: #1C63EE;
+body {
+    .filtering_item {
+        width: 120px;
+        height: 35px;
+        margin: 8px 4px;
+        border: solid 1px #D9D9D9;
+    }
+
+    .filtering_place {
+        margin-top: 10px;
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+    .choosing_room_place {
+        flex-wrap: wrap;
+        display: flex;
+        margin-top: 12px;
+    }
+
+    .choosing_room_item {
+        margin: 12px 12px;
+        padding: 10px 0;
+        width: 22%;
+        display: flex;
+        border: 1px solid;
+        box-shadow: 5px 10px #888888
+    }
+
+    .name_of_room {
+        font-family: @font_family_1;
+        font-size: 18px;
+        font-weight: 700;
+        color: @color_2;
+        text-align: center;
+    }
+
+    .side_info {
+        margin: 0px 8px;
+    }
+
+    .side_heading_place {
+        font-weight: 700;
+        margin-bottom: 0px;
+    }
+
+    .side_content_place {
+        margin-top: 4px;
+        text-align: center;
+    }
+
+    .choosing_room_status {
+        margin-left: 7%;
+        padding: 0 10px;
+        border-left: solid 1px #D9D9D9;
+        width: 100%;
+    }
+
+    .heading_number_tag {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 8px
+    }
+
+    .room_info {
+        border: solid 3px #0B42AB;
+
+        &.not_available {
+            border: solid 3px #FF0000 !important;
+        }
+
+        &.choosing {
+            border: solid 3px #35D66C !important;
+        }
+    }
+
+    .btn_choose {
+        border: none;
+        outline: none;
+        font-size: 12px;
+        font-family: @font_family_3;
+        font-weight: 700;
+        width: 84px;
+        height: 32px;
+        border-radius: 4px;
+        margin-top: 8px;
+        text-align: center;
+        color: white;
+        background-color: #0B42AB;
+
+        &.choosing {
+            background-color: #35D66C;
+        }
+
+        &.not_available {
+            background-color: #FF0000;
+        }
+    }
+
+    .number_des {
+        font-weight: 700;
+        color: #0B42AB;
+        text-align: center;
+        font-size: 20px;
+
+        &.choosing {
+            color: #35D66C;
+        }
+
+        &.not_available {
+            color: #FF0000;
+        }
+    }
+}

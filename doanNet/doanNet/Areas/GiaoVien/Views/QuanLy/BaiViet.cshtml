@@ -1,0 +1,140 @@
+﻿
+
+@{
+    ViewBag.Title = "Bài Viết";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH BÀI VIẾT</h2>
+        </div>
+    </div>
+    <div class="filtering_place">
+        <input type="date" class="date_filtering_place" />
+    </div>
+    <div class="function_btn" style="display: flex; justify-content: end; margin-top: 8px; margin-bottom: 8px; margin-right: 32px;">
+        <div class="add_btn" style="margin: 10px">
+            <!-- Colored mini FAB button -->
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+                    style="background-color: #35d66c">
+                <a href="@Url.Action("ThemBaiViet","QuanLy")">
+                    <i class="fa-solid fa-plus" style="margin: 10px"></i>
+                </a>
+            </button>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(() => {
+
+        })
+    </script>
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr style="background-color: darkblue; color: white">
+                    <th scope="col">Tiêu đề</th>
+                    <th scope="col">Meta</th>
+                    <th scope="col">Lần cuối chỉnh sửa</th>
+                    <th scope="col">Tag bài đăng</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @functions {
+                    // Define the getOppositeColor function
+                    string GetOppositeColor(string hexColor)
+                    {
+                        // Remove '#' if present
+                        hexColor = hexColor.Replace("#", "");
+
+                        // Convert hex to RGB
+                        int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+                        int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+                        int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+
+                        // Calculate relative luminance (brightness)
+                        double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+                        // Determine contrasting color based on luminance threshold
+                        return luminance > 0.5 ? "#000000" : "#FFFFFF";
+                    }
+                }
+                @functions {
+                    // Define the formatDateTime function
+                    string formatDateTime(DateTime dateTime)
+                    {
+                        // Implement your logic here to format the datetime string
+                        // For example:
+
+                        return dateTime.ToString("dd/MM/yyyy");
+                    }
+                }
+                @foreach (var item in ViewBag.posts)
+                {
+                    List<int> categories = new List<int>();
+                    List<string> categoriesName = new List<string>();
+                    <tr>
+                        <th>@item.PostTitle</th>
+                        <td>@item.Meta</td>
+                        <td>@formatDateTime(item.DateBegin)</td>
+                        <td>
+                            @foreach (var categorybridge in ViewBag.categoryBridges)
+                            {
+                                if (categorybridge.IDPost == item.IDPost)
+                                {
+                                    categories.Add(categorybridge.IDCategory);
+                                }
+                            }
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                foreach (int id in categories)
+                                {
+                                    if (category.IDCategory == id)
+                                    {
+                                        var oppositeColorForText = GetOppositeColor(category.ColorChip);
+                                        <li class="category-checkbox-parents" style="text-decoration:none;display:flex;align-items:center;margin:4px 0">
+                                            <span class="badge badge-pill badge-primary" style="color: @(oppositeColorForText); margin-left:12px;background-color: @category.ColorChip;" id="@category.IDCategory">@category.CategoryTitle</span>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("SuaBaiViet", "QuanLy", new {id = @item.IDPost})">
+                                <i class="fa-regular fa-pen-to-square" style="color: blue;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(2).search(newDateString, true, false).draw();
+    })
+</script>
+

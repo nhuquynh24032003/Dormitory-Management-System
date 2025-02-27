@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "DanhSachHoaDon";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/FeeAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/LogAPI.js")
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+<div class="container">
+    <div class="col-12 text-center" style="padding:20px">
+        <h2 class="fw-bold">DANH SÁCH HÓA ĐƠN</h2>
+    </div>
+    <div class="filtering_place">
+        <input type="month" class="date_filtering_place" />
+    </div>
+    <div class="function_btn" style="display: flex; justify-content: end; margin-top: 8px; margin-bottom: 8px; margin-right: 32px;">
+        <div class="add_btn" style="margin: 10px">
+            <!-- Colored mini FAB button -->
+            <button onclick="showModal()"
+                    class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored add-fee-btn"
+                    style="background-color: #35d66c">
+                <i class="fa-solid fa-plus" style="margin: 10px"></i>
+            </button>
+            <script>
+                $(document).ready(() => {
+                    function showModal() {
+                        var myModal = new bootstrap.Modal(document.getElementById('ThemHoaDon'));
+                        myModal.show();
+                    }
+                    $(".add-fee-btn").click(showModal);
+                })
+            </script>
+        </div>
+    </div>
+    <div class="modal fade" id="ThemHoaDon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h3 style="font-weight: bold; color: blue; text-align: center">Thêm phí Kí Túc Xá TDTU</h3>
+                    <div class="row align-items-center pt-2 pb-3" style="margin-top:0px">
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Tên Phí</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control Name_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Chi Tiết Phí</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control Description_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">
+                                Ngày bắt đầu thanh toán
+                            </h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="date" class="form-control TimeBegin_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">
+                                Ngày kết thúc thanh toán
+                            </h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="date" class="form-control TimeEnd_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">
+                                Số tiền thanh toán
+                            </h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="number" class="form-control Quantity_Place" min="1000" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Phòng thanh toán</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <select class="Room_id" id="Room_id" style="width: 100%">
+                                @foreach (var item in ViewBag.Rooms)
+                                {
+                                    <option value="@item.IDRoom">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary submit_btn">Thêm hoá đơn</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <table class="table text-center" id="datatableform">
+            <thead>
+                <tr>
+                    <th scope="col">Thời gian</th>
+                    <th scope="col">Số phòng</th>
+                    <th scope="col">Đã thanh toán</th>
+                    <th scope="col">Chưa thanh toán</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="table_fee_by_month">
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        function redirectToPage(url) {
+            window.location.href = url;
+        }
+        function formatToVND(number) {
+            return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VNĐ';
+        }
+        $(".submit_btn").click(async () => {
+            const FeeData = {
+                Name: $(".Name_Place").val(),
+                Description: $(".Description_Place").val(),
+                TimeBegin: $(".TimeBegin_Place").val(),
+                TimeEnd: $(".TimeEnd_Place").val(),
+                Quantity: $(".Quantity_Place").val(),
+                IDRoom: $(".Room_id").val(),
+            }
+            await addingFee(FeeData);
+            $('#ThemHoaDon').modal('hide');
+            renderFeeByMonth();
+        });
+        async function renderFeeByMonth() {
+            let allFee = await AnalysticFee();
+            let table = new DataTable('#datatableform');
+            table.clear();
+
+            allFee.forEach((value) => {
+                let html = `
+                <tr>
+                    <td>${String(value.Month).padStart(2, '0')}/${value.Year}</td>
+                    <td>${value.RoomCount}</td>
+                    <td>${value.Completed}</td>
+                    <td>${value.UnCompleted}</td>
+                    <td>${formatToVND(value.TotalQuantity)}</td>
+                    <td>
+                        <a href="/GiaoVien/QuanLy/DanhSachHoaDonTheoThang?Year=${value.Year}&Month=${value.Month}">
+                            <i class="fa-regular fa-eye" style="color: blue; padding-right: 10px; cursor: pointer"></i>
+                        </a>
+                    </td>
+                </tr>`;
+                table.row.add($(html).get(0));
+            });
+            table.draw();
+        };
+        renderFeeByMonth();
+
+        $('.date_filtering_place').on('change', function (e) {
+            var dateVal = $(this).val();
+            var regex = /\b(\d{4})-(\d{2})\b/;
+            console.log('change')
+            // Check if the dateVal matches the regex pattern
+            var match = dateVal.match(regex);
+
+            if (match) {
+                // Extract year and month from the matched groups
+                var year = match[1];
+                var month = match[2];
+
+                // Construct the new date string in the MM/YYYY format
+                var newDateString = month + "/" + year;
+            } else {
+                console.log("Invalid date format.");
+            }
+            table.column(0).search(newDateString, true, false).draw();
+        });
+    });
+</script>

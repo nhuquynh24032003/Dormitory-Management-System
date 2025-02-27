@@ -1,0 +1,657 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KTXTDTUModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="KTXTDTUEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="KTXTDTUModel.Account" />
+    <EntitySet Name="AccountTypes" EntityType="KTXTDTUModel.AccountType" />
+    <EntitySet Name="Attendances" EntityType="KTXTDTUModel.Attendance" />
+    <EntitySet Name="AttendanceBridges" EntityType="KTXTDTUModel.AttendanceBridge" />
+    <EntitySet Name="Categories" EntityType="KTXTDTUModel.Category" />
+    <EntitySet Name="CategoryBridges" EntityType="KTXTDTUModel.CategoryBridge" />
+    <EntitySet Name="Contracts" EntityType="KTXTDTUModel.Contract" />
+    <EntitySet Name="Faculties" EntityType="KTXTDTUModel.Faculty" />
+    <EntitySet Name="Fees" EntityType="KTXTDTUModel.Fee" />
+    <EntitySet Name="Logs" EntityType="KTXTDTUModel.Log" />
+    <EntitySet Name="Menus" EntityType="KTXTDTUModel.Menu" />
+    <EntitySet Name="Mistakes" EntityType="KTXTDTUModel.Mistake" />
+    <EntitySet Name="Places" EntityType="KTXTDTUModel.Place" />
+    <EntitySet Name="Posts" EntityType="KTXTDTUModel.Post" />
+    <EntitySet Name="Priorities" EntityType="KTXTDTUModel.Priority" />
+    <EntitySet Name="Rooms" EntityType="KTXTDTUModel.Room" />
+    <EntitySet Name="SinhViens" EntityType="KTXTDTUModel.SinhVien" />
+    <EntitySet Name="Teachers" EntityType="KTXTDTUModel.Teacher" />
+    <EntitySet Name="TrucCongs" EntityType="KTXTDTUModel.TrucCong" />
+    <AssociationSet Name="FK__Account__Account__3D2915A8" Association="KTXTDTUModel.FK__Account__Account__3D2915A8">
+      <End Role="AccountType" EntitySet="AccountTypes" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Account__IDSinhV__74794A92" Association="KTXTDTUModel.FK__Account__IDSinhV__74794A92">
+      <End Role="SinhVien" EntitySet="SinhViens" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Account__IDTeach__793DFFAF" Association="KTXTDTUModel.FK__Account__IDTeach__793DFFAF">
+      <End Role="Teacher" EntitySet="Teachers" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Attendanc__IDAcc__09A971A2" Association="KTXTDTUModel.FK__Attendanc__IDAcc__09A971A2">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="AttendanceBridge" EntitySet="AttendanceBridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Mistake__IDAccou__76969D2E" Association="KTXTDTUModel.FK__Mistake__IDAccou__76969D2E">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Mistake" EntitySet="Mistakes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Post__IDAccount__7D439ABD" Association="KTXTDTUModel.FK__Post__IDAccount__7D439ABD">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Post" EntitySet="Posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TrucCong__IDAcco__4F47C5E3" Association="KTXTDTUModel.FK__TrucCong__IDAcco__4F47C5E3">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="TrucCong" EntitySet="TrucCongs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Attendanc__IDAtt__07C12930" Association="KTXTDTUModel.FK__Attendanc__IDAtt__07C12930">
+      <End Role="Attendance" EntitySet="Attendances" />
+      <End Role="AttendanceBridge" EntitySet="AttendanceBridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Attendanc__IDSin__08B54D69" Association="KTXTDTUModel.FK__Attendanc__IDSin__08B54D69">
+      <End Role="SinhVien" EntitySet="SinhViens" />
+      <End Role="AttendanceBridge" EntitySet="AttendanceBridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CategoryB__IDCat__02084FDA" Association="KTXTDTUModel.FK__CategoryB__IDCat__02084FDA">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="CategoryBridge" EntitySet="CategoryBridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CategoryB__IDPos__02FC7413" Association="KTXTDTUModel.FK__CategoryB__IDPos__02FC7413">
+      <End Role="Post" EntitySet="Posts" />
+      <End Role="CategoryBridge" EntitySet="CategoryBridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Contract__IDPlac__6477ECF3" Association="KTXTDTUModel.FK__Contract__IDPlac__6477ECF3">
+      <End Role="Place" EntitySet="Places" />
+      <End Role="Contract" EntitySet="Contracts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Contract__IDSinh__607251E5" Association="KTXTDTUModel.FK__Contract__IDSinh__607251E5">
+      <End Role="SinhVien" EntitySet="SinhViens" />
+      <End Role="Contract" EntitySet="Contracts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ContractPriority" Association="KTXTDTUModel.FK_ContractPriority">
+      <End Role="Priority" EntitySet="Priorities" />
+      <End Role="Contract" EntitySet="Contracts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SinhVien__IDFalc__6B24EA82" Association="KTXTDTUModel.FK__SinhVien__IDFalc__6B24EA82">
+      <End Role="Faculty" EntitySet="Faculties" />
+      <End Role="SinhVien" EntitySet="SinhViens" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Fee__IDRoom__7A672E12" Association="KTXTDTUModel.FK__Fee__IDRoom__7A672E12">
+      <End Role="Room" EntitySet="Rooms" />
+      <End Role="Fee" EntitySet="Fees" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Log__IDFee__0D7A0286" Association="KTXTDTUModel.FK__Log__IDFee__0D7A0286">
+      <End Role="Fee" EntitySet="Fees" />
+      <End Role="Log" EntitySet="Logs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Log__IDSinhVien__0C85DE4D" Association="KTXTDTUModel.FK__Log__IDSinhVien__0C85DE4D">
+      <End Role="SinhVien" EntitySet="SinhViens" />
+      <End Role="Log" EntitySet="Logs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Mistake__IDRoom__778AC167" Association="KTXTDTUModel.FK__Mistake__IDRoom__778AC167">
+      <End Role="Room" EntitySet="Rooms" />
+      <End Role="Mistake" EntitySet="Mistakes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Mistake__IDSinhV__75A278F5" Association="KTXTDTUModel.FK__Mistake__IDSinhV__75A278F5">
+      <End Role="SinhVien" EntitySet="SinhViens" />
+      <End Role="Mistake" EntitySet="Mistakes" />
+    </AssociationSet>
+    <AssociationSet Name="FK__SinhVien__IDRoom__6D0D32F4" Association="KTXTDTUModel.FK__SinhVien__IDRoom__6D0D32F4">
+      <End Role="Room" EntitySet="Rooms" />
+      <End Role="SinhVien" EntitySet="SinhViens" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="IDAccount" />
+    </Key>
+    <Property Name="IDAccount" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Available" Type="Int32" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="AccountTypeID" Type="Int32" />
+    <Property Name="MSSV" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IDSinhVien" Type="Int32" />
+    <Property Name="IDTeacher" Type="Int32" />
+    <NavigationProperty Name="AccountType" Relationship="KTXTDTUModel.FK__Account__Account__3D2915A8" FromRole="Account" ToRole="AccountType" />
+    <NavigationProperty Name="SinhVien" Relationship="KTXTDTUModel.FK__Account__IDSinhV__74794A92" FromRole="Account" ToRole="SinhVien" />
+    <NavigationProperty Name="Teacher" Relationship="KTXTDTUModel.FK__Account__IDTeach__793DFFAF" FromRole="Account" ToRole="Teacher" />
+    <NavigationProperty Name="AttendanceBridges" Relationship="KTXTDTUModel.FK__Attendanc__IDAcc__09A971A2" FromRole="Account" ToRole="AttendanceBridge" />
+    <NavigationProperty Name="Mistakes" Relationship="KTXTDTUModel.FK__Mistake__IDAccou__76969D2E" FromRole="Account" ToRole="Mistake" />
+    <NavigationProperty Name="Posts" Relationship="KTXTDTUModel.FK__Post__IDAccount__7D439ABD" FromRole="Account" ToRole="Post" />
+    <NavigationProperty Name="TrucCongs" Relationship="KTXTDTUModel.FK__TrucCong__IDAcco__4F47C5E3" FromRole="Account" ToRole="TrucCong" />
+  </EntityType>
+  <EntityType Name="AccountType">
+    <Key>
+      <PropertyRef Name="IDAccountType" />
+    </Key>
+    <Property Name="IDAccountType" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Accounts" Relationship="KTXTDTUModel.FK__Account__Account__3D2915A8" FromRole="AccountType" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="Attendance">
+    <Key>
+      <PropertyRef Name="IDAttendance" />
+    </Key>
+    <Property Name="IDAttendance" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IsAttend" Type="Int32" Nullable="false" />
+    <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AttendanceBridges" Relationship="KTXTDTUModel.FK__Attendanc__IDAtt__07C12930" FromRole="Attendance" ToRole="AttendanceBridge" />
+  </EntityType>
+  <EntityType Name="AttendanceBridge">
+    <Key>
+      <PropertyRef Name="IDAttendance" />
+      <PropertyRef Name="IDSinhVien" />
+      <PropertyRef Name="IDAccount" />
+    </Key>
+    <Property Name="IDAttendance" Type="Int32" Nullable="false" />
+    <Property Name="IDSinhVien" Type="Int32" Nullable="false" />
+    <Property Name="IDAccount" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="KTXTDTUModel.FK__Attendanc__IDAcc__09A971A2" FromRole="AttendanceBridge" ToRole="Account" />
+    <NavigationProperty Name="Attendance" Relationship="KTXTDTUModel.FK__Attendanc__IDAtt__07C12930" FromRole="AttendanceBridge" ToRole="Attendance" />
+    <NavigationProperty Name="SinhVien" Relationship="KTXTDTUModel.FK__Attendanc__IDSin__08B54D69" FromRole="AttendanceBridge" ToRole="SinhVien" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="IDCategory" />
+    </Key>
+    <Property Name="IDCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ColorChip" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CategoryBridges" Relationship="KTXTDTUModel.FK__CategoryB__IDCat__02084FDA" FromRole="Category" ToRole="CategoryBridge" />
+  </EntityType>
+  <EntityType Name="CategoryBridge">
+    <Key>
+      <PropertyRef Name="IDCategory" />
+      <PropertyRef Name="IDPost" />
+    </Key>
+    <Property Name="IDCategory" Type="Int32" Nullable="false" />
+    <Property Name="IDPost" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Category" Relationship="KTXTDTUModel.FK__CategoryB__IDCat__02084FDA" FromRole="CategoryBridge" ToRole="Category" />
+    <NavigationProperty Name="Post" Relationship="KTXTDTUModel.FK__CategoryB__IDPos__02FC7413" FromRole="CategoryBridge" ToRole="Post" />
+  </EntityType>
+  <EntityType Name="Contract">
+    <Key>
+      <PropertyRef Name="IDContract" />
+    </Key>
+    <Property Name="IDContract" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IDCitizen" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ProfilePlace" Type="Int32" />
+    <Property Name="IDPlace" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="IDPriority" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="xetduyet" Type="Boolean" />
+    <Property Name="TimeExpired" Type="DateTime" Precision="3" />
+    <Property Name="IDSinhVien" Type="Int32" />
+    <NavigationProperty Name="Place" Relationship="KTXTDTUModel.FK__Contract__IDPlac__6477ECF3" FromRole="Contract" ToRole="Place" />
+    <NavigationProperty Name="SinhVien" Relationship="KTXTDTUModel.FK__Contract__IDSinh__607251E5" FromRole="Contract" ToRole="SinhVien" />
+    <NavigationProperty Name="Priority" Relationship="KTXTDTUModel.FK_ContractPriority" FromRole="Contract" ToRole="Priority" />
+  </EntityType>
+  <EntityType Name="Faculty">
+    <Key>
+      <PropertyRef Name="IDFalcuty" />
+    </Key>
+    <Property Name="IDFalcuty" Type="Int32" Nullable="false" />
+    <Property Name="NameFalculty" Type="String" Nullable="false" MaxLength="70" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="SinhViens" Relationship="KTXTDTUModel.FK__SinhVien__IDFalc__6B24EA82" FromRole="Faculty" ToRole="SinhVien" />
+  </EntityType>
+  <EntityType Name="Fee">
+    <Key>
+      <PropertyRef Name="IDFee" />
+    </Key>
+    <Property Name="IDFee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DateStart" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="IDRoom" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Room" Relationship="KTXTDTUModel.FK__Fee__IDRoom__7A672E12" FromRole="Fee" ToRole="Room" />
+    <NavigationProperty Name="Logs" Relationship="KTXTDTUModel.FK__Log__IDFee__0D7A0286" FromRole="Fee" ToRole="Log" />
+  </EntityType>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="IDLog" />
+    </Key>
+    <Property Name="IDLog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IDFee" Type="Int32" Nullable="false" />
+    <Property Name="DateDone" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="IDSinhVien" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Fee" Relationship="KTXTDTUModel.FK__Log__IDFee__0D7A0286" FromRole="Log" ToRole="Fee" />
+    <NavigationProperty Name="SinhVien" Relationship="KTXTDTUModel.FK__Log__IDSinhVien__0C85DE4D" FromRole="Log" ToRole="SinhVien" />
+  </EntityType>
+  <EntityType Name="Menu">
+    <Key>
+      <PropertyRef Name="Order" />
+    </Key>
+    <Property Name="Order" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Meta" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="TextMenu" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FatherID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Mistake">
+    <Key>
+      <PropertyRef Name="IDMistake" />
+    </Key>
+    <Property Name="IDMistake" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MistakeDes" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TimeCaught" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="BedID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="IDSinhVien" Type="Int32" Nullable="false" />
+    <Property Name="IDAccount" Type="Int32" Nullable="false" />
+    <Property Name="IDRoom" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="ImageDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Account" Relationship="KTXTDTUModel.FK__Mistake__IDAccou__76969D2E" FromRole="Mistake" ToRole="Account" />
+    <NavigationProperty Name="Room" Relationship="KTXTDTUModel.FK__Mistake__IDRoom__778AC167" FromRole="Mistake" ToRole="Room" />
+    <NavigationProperty Name="SinhVien" Relationship="KTXTDTUModel.FK__Mistake__IDSinhV__75A278F5" FromRole="Mistake" ToRole="SinhVien" />
+  </EntityType>
+  <EntityType Name="Place">
+    <Key>
+      <PropertyRef Name="IDPlace" />
+    </Key>
+    <Property Name="IDPlace" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Contracts" Relationship="KTXTDTUModel.FK__Contract__IDPlac__6477ECF3" FromRole="Place" ToRole="Contract" />
+  </EntityType>
+  <EntityType Name="Post">
+    <Key>
+      <PropertyRef Name="IDPost" />
+    </Key>
+    <Property Name="IDPost" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PostTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IDAccount" Type="Int32" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="PostImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PostDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Account" Relationship="KTXTDTUModel.FK__Post__IDAccount__7D439ABD" FromRole="Post" ToRole="Account" />
+    <NavigationProperty Name="CategoryBridges" Relationship="KTXTDTUModel.FK__CategoryB__IDPos__02FC7413" FromRole="Post" ToRole="CategoryBridge" />
+  </EntityType>
+  <EntityType Name="Priority">
+    <Key>
+      <PropertyRef Name="IDPriority" />
+    </Key>
+    <Property Name="IDPriority" Type="Int32" Nullable="false" />
+    <Property Name="PriorityDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Contracts" Relationship="KTXTDTUModel.FK_ContractPriority" FromRole="Priority" ToRole="Contract" />
+  </EntityType>
+  <EntityType Name="Room">
+    <Key>
+      <PropertyRef Name="IDRoom" />
+    </Key>
+    <Property Name="IDRoom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Floor" Type="Int32" Nullable="false" />
+    <Property Name="Building" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="RoomType" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <Property Name="PriceRoom" Type="Int32" />
+    <NavigationProperty Name="Fees" Relationship="KTXTDTUModel.FK__Fee__IDRoom__7A672E12" FromRole="Room" ToRole="Fee" />
+    <NavigationProperty Name="Mistakes" Relationship="KTXTDTUModel.FK__Mistake__IDRoom__778AC167" FromRole="Room" ToRole="Mistake" />
+    <NavigationProperty Name="SinhViens" Relationship="KTXTDTUModel.FK__SinhVien__IDRoom__6D0D32F4" FromRole="Room" ToRole="SinhVien" />
+  </EntityType>
+  <EntityType Name="SinhVien">
+    <Key>
+      <PropertyRef Name="IDSinhVien" />
+    </Key>
+    <Property Name="IDSinhVien" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="BirthDay" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="AttendDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="AttendYear" Type="Int32" Nullable="false" />
+    <Property Name="GraduateYear" Type="Int32" Nullable="false" />
+    <Property Name="MSSV" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IDFalcuty" Type="Int32" Nullable="false" />
+    <Property Name="IDRoom" Type="Int32" Nullable="false" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Accounts" Relationship="KTXTDTUModel.FK__Account__IDSinhV__74794A92" FromRole="SinhVien" ToRole="Account" />
+    <NavigationProperty Name="AttendanceBridges" Relationship="KTXTDTUModel.FK__Attendanc__IDSin__08B54D69" FromRole="SinhVien" ToRole="AttendanceBridge" />
+    <NavigationProperty Name="Contracts" Relationship="KTXTDTUModel.FK__Contract__IDSinh__607251E5" FromRole="SinhVien" ToRole="Contract" />
+    <NavigationProperty Name="Faculty" Relationship="KTXTDTUModel.FK__SinhVien__IDFalc__6B24EA82" FromRole="SinhVien" ToRole="Faculty" />
+    <NavigationProperty Name="Logs" Relationship="KTXTDTUModel.FK__Log__IDSinhVien__0C85DE4D" FromRole="SinhVien" ToRole="Log" />
+    <NavigationProperty Name="Mistakes" Relationship="KTXTDTUModel.FK__Mistake__IDSinhV__75A278F5" FromRole="SinhVien" ToRole="Mistake" />
+    <NavigationProperty Name="Room" Relationship="KTXTDTUModel.FK__SinhVien__IDRoom__6D0D32F4" FromRole="SinhVien" ToRole="Room" />
+  </EntityType>
+  <EntityType Name="Teacher">
+    <Key>
+      <PropertyRef Name="IDTeacher" />
+    </Key>
+    <Property Name="IDTeacher" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Accounts" Relationship="KTXTDTUModel.FK__Account__IDTeach__793DFFAF" FromRole="Teacher" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="TrucCong">
+    <Key>
+      <PropertyRef Name="IDTruc" />
+    </Key>
+    <Property Name="IDTruc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IDAccount" Type="Int32" />
+    <Property Name="DateApply" Type="DateTime" Precision="3" />
+    <Property Name="Order" Type="Int32" />
+    <Property Name="Meta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DateBegin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hide" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="KTXTDTUModel.FK__TrucCong__IDAcco__4F47C5E3" FromRole="TrucCong" ToRole="Account" />
+  </EntityType>
+  <Association Name="FK__Account__Account__3D2915A8">
+    <End Type="KTXTDTUModel.AccountType" Role="AccountType" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountType">
+        <PropertyRef Name="IDAccountType" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="AccountTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Account__IDSinhV__74794A92">
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SinhVien">
+        <PropertyRef Name="IDSinhVien" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="IDSinhVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Account__IDTeach__793DFFAF">
+    <End Type="KTXTDTUModel.Teacher" Role="Teacher" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Teacher">
+        <PropertyRef Name="IDTeacher" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="IDTeacher" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Attendanc__IDAcc__09A971A2">
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="1" />
+    <End Type="KTXTDTUModel.AttendanceBridge" Role="AttendanceBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="IDAccount" />
+      </Principal>
+      <Dependent Role="AttendanceBridge">
+        <PropertyRef Name="IDAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Mistake__IDAccou__76969D2E">
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Mistake" Role="Mistake" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="IDAccount" />
+      </Principal>
+      <Dependent Role="Mistake">
+        <PropertyRef Name="IDAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Post__IDAccount__7D439ABD">
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Post" Role="Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="IDAccount" />
+      </Principal>
+      <Dependent Role="Post">
+        <PropertyRef Name="IDAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TrucCong__IDAcco__4F47C5E3">
+    <End Type="KTXTDTUModel.Account" Role="Account" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.TrucCong" Role="TrucCong" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="IDAccount" />
+      </Principal>
+      <Dependent Role="TrucCong">
+        <PropertyRef Name="IDAccount" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Attendanc__IDAtt__07C12930">
+    <End Type="KTXTDTUModel.Attendance" Role="Attendance" Multiplicity="1" />
+    <End Type="KTXTDTUModel.AttendanceBridge" Role="AttendanceBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Attendance">
+        <PropertyRef Name="IDAttendance" />
+      </Principal>
+      <Dependent Role="AttendanceBridge">
+        <PropertyRef Name="IDAttendance" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Attendanc__IDSin__08B54D69">
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="1" />
+    <End Type="KTXTDTUModel.AttendanceBridge" Role="AttendanceBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SinhVien">
+        <PropertyRef Name="IDSinhVien" />
+      </Principal>
+      <Dependent Role="AttendanceBridge">
+        <PropertyRef Name="IDSinhVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CategoryB__IDCat__02084FDA">
+    <End Type="KTXTDTUModel.Category" Role="Category" Multiplicity="1" />
+    <End Type="KTXTDTUModel.CategoryBridge" Role="CategoryBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="IDCategory" />
+      </Principal>
+      <Dependent Role="CategoryBridge">
+        <PropertyRef Name="IDCategory" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CategoryB__IDPos__02FC7413">
+    <End Type="KTXTDTUModel.Post" Role="Post" Multiplicity="1" />
+    <End Type="KTXTDTUModel.CategoryBridge" Role="CategoryBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Post">
+        <PropertyRef Name="IDPost" />
+      </Principal>
+      <Dependent Role="CategoryBridge">
+        <PropertyRef Name="IDPost" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Contract__IDPlac__6477ECF3">
+    <End Type="KTXTDTUModel.Place" Role="Place" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Contract" Role="Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Place">
+        <PropertyRef Name="IDPlace" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="IDPlace" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Contract__IDSinh__607251E5">
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Contract" Role="Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SinhVien">
+        <PropertyRef Name="IDSinhVien" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="IDSinhVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ContractPriority">
+    <End Type="KTXTDTUModel.Priority" Role="Priority" Multiplicity="0..1" />
+    <End Type="KTXTDTUModel.Contract" Role="Contract" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Priority">
+        <PropertyRef Name="IDPriority" />
+      </Principal>
+      <Dependent Role="Contract">
+        <PropertyRef Name="IDPriority" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SinhVien__IDFalc__6B24EA82">
+    <End Type="KTXTDTUModel.Faculty" Role="Faculty" Multiplicity="1" />
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Faculty">
+        <PropertyRef Name="IDFalcuty" />
+      </Principal>
+      <Dependent Role="SinhVien">
+        <PropertyRef Name="IDFalcuty" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Fee__IDRoom__7A672E12">
+    <End Type="KTXTDTUModel.Room" Role="Room" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Fee" Role="Fee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room">
+        <PropertyRef Name="IDRoom" />
+      </Principal>
+      <Dependent Role="Fee">
+        <PropertyRef Name="IDRoom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Log__IDFee__0D7A0286">
+    <End Type="KTXTDTUModel.Fee" Role="Fee" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Log" Role="Log" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fee">
+        <PropertyRef Name="IDFee" />
+      </Principal>
+      <Dependent Role="Log">
+        <PropertyRef Name="IDFee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Log__IDSinhVien__0C85DE4D">
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Log" Role="Log" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SinhVien">
+        <PropertyRef Name="IDSinhVien" />
+      </Principal>
+      <Dependent Role="Log">
+        <PropertyRef Name="IDSinhVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Mistake__IDRoom__778AC167">
+    <End Type="KTXTDTUModel.Room" Role="Room" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Mistake" Role="Mistake" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room">
+        <PropertyRef Name="IDRoom" />
+      </Principal>
+      <Dependent Role="Mistake">
+        <PropertyRef Name="IDRoom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Mistake__IDSinhV__75A278F5">
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="1" />
+    <End Type="KTXTDTUModel.Mistake" Role="Mistake" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SinhVien">
+        <PropertyRef Name="IDSinhVien" />
+      </Principal>
+      <Dependent Role="Mistake">
+        <PropertyRef Name="IDSinhVien" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__SinhVien__IDRoom__6D0D32F4">
+    <End Type="KTXTDTUModel.Room" Role="Room" Multiplicity="1" />
+    <End Type="KTXTDTUModel.SinhVien" Role="SinhVien" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room">
+        <PropertyRef Name="IDRoom" />
+      </Principal>
+      <Dependent Role="SinhVien">
+        <PropertyRef Name="IDRoom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

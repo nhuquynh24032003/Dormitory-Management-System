@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachHopDong";
+    Layout = "~/Views/Shared/layoutstudent.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/ContractAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/PriorityAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH HỢP ĐỒNG</h2>
+        </div>
+    </div>
+    <div class="filtering_place">
+            <input type="date" class="date_filtering_place"/>
+            <select class="status" id="status">
+                <option value="0" disabled selected>Trạng thái</option>
+                <option value="1"  >Đã duyệt</option>
+                <option value="2"  >Chưa duyệt</option>
+
+            </select>
+        <script>
+            $(document).ready(() => {
+                
+            })
+        </script>
+    </div>
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr>
+                    <th scope="col">Mã hợp đồng</th>
+                    <th scope="col">Họ và tên Sinh viên</th>
+                    <th scope="col">Căn cước công dân</th>
+                    <th scope="col">Hồ sơ đi kèm</th>
+                    <th scope="col">Khu vực</th>
+                    <th scope="col">Ưu tiên</th>
+                    <th scope="col">Đăng ký vào lúc</th>
+                    <th scope="col">Xét duyệt</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(async () => {
+            function formatDateTime(datetimeString) {
+                var dateTime = new Date(datetimeString);
+                var formattedDate = dateTime.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                var formattedTime = dateTime.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                return formattedDate + ' ';
+            }
+            async function renderContractByStudent(ContractDataToRender) {
+                let htmls = ``
+                let table = new DataTable('#datatableform');
+                table.clear();
+
+                ContractDataToRender.forEach(async (contract) => {
+                    let PriorityInfo = await findPriorityById(contract.IDPriority);
+                    let SinhVienInfo = await findSinhVienById(contract.IDSinhVien)
+                    console.log(PriorityInfo)
+                    htmls = `
+                    <tr>
+                        <td>${contract.IDContract}</td>
+                        <td>${SinhVienInfo.FullName}</td>
+                        <td>${contract.IDCitizen}</td>
+                        <td>${contract.ProfilePlace == 0 ? 'Không có' : 'Có'}</td>
+                        <td>${contract.IDPlace}</td>
+                        <td>${contract.IDPriority}</td>
+                        <td>${formatDateTime(contract.TimeExpired)}</td>
+                        <td>${contract.xetduyet == 0 ? `Đã duyệt` : `Chưa duyệt`}</td>
+                    </tr>`;
+                    table.row.add($(htmls).get(0));
+                    table.draw();
+                })
+
+
+            };
+
+            if (!sessionStorage.getItem("IDAccount")) {
+                window.location.href = "@Url.Action("DangNhapSinhVien", "TrangChu")"
+            }
+            else {
+                const IDAccount = sessionStorage.getItem("IDAccount")
+                let AccountInfo = await getAccountByID(IDAccount)
+                const IDSinhVien = AccountInfo.IDSinhVien
+                let ContractInfo = await getContractBySinhVienID(IDSinhVien);
+                renderContractByStudent(ContractInfo)
+            }
+            
+
+            // Push the custom search function to the DataTables search array
+
+            $('.date_filtering_place').on('change', function (e) {
+                var dateVal = $(this).val();
+                var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+                // Check if the dateVal matches the regex pattern
+                var match = dateVal.match(regex);
+
+                if (match) {
+                    // Extract year, month, and day from the matched groups
+                    var year = match[1];
+                    var month = match[2];
+                    var day = match[3];
+
+                    // Construct the new date string in the DD-MM-YYYY format
+                    var newDateString = day + "/" + month + "/" + year;
+
+                } else {
+                    console.log("Invalid date format.");
+                }
+                //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+                table.column(6).search(newDateString, true, false).draw();
+            })
+            $('.status').on('change', function (e) {
+                var statusval = $(this).val();
+                if (statusval == 1) {
+                    //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+                    table.column(7).search("Đã duyệt").draw();
+
+                }
+                if (statusval == 2) {
+                    //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+                    table.column(7).search("Chưa duyệt").draw();
+                }
+
+            })
+        })
+    </script>
+</div>
+
+

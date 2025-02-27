@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "QuanLyPhong";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+
+<div class="container">
+    <div class="col-12 text-center" style="padding:20px">
+        <h2 style="font-weight: bold">QUẢN LÝ PHÒNG</h2>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            <select name="tang" id="tang">
+                <option value="0" disabled selected>Tầng</option>
+                @foreach (var Floor in ViewBag.allFloor)
+                {
+
+                    <option value="@Floor">Tầng @Floor</option>
+                }
+            </select>
+        </div>
+        <div class="col-1">
+            <select name="toa" id="toa">
+                <option value="0" disabled selected>Toà</option>
+                @foreach (var Building in ViewBag.allFloor2)
+                {
+                    <option value="@Building">Toà @Building</option>
+                  
+                }
+            </select>
+        </div>
+    </div>
+  
+  
+    <div class="row">
+
+        <div class="row">
+            <table class="table" id="datatableform">
+                <thead>
+                    <tr>
+                        <th scope="col">ID phòng</th>
+                        <th scope="col">Tên phòng</th>
+                        <th scope="col">Tầng</th>
+                        <th scope="col">Tòa</th>
+                        <th scope="col">Loại phòng</th>
+                        <th scope="col">Giá phòng</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.rooms)
+                    {
+                        <tr>
+                            <td>@item.IDRoom</td>
+                            <td>@item.Name</td>
+                            <td>@item.Floor</td>
+                            <td>@item.Building</td>
+                            <td>@item.RoomType</td>
+                            <td>@item.PriceRoom</td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $('#tang').on('change', function (e) {
+        var statusval = $(this).val();
+        table.column(2).search(statusval).draw();
+    })
+    $('#toa').on('change', function (e) {
+        var statusval = $(this).val();
+        table.column(3).search(statusval).draw();
+    })
+</script>
+
+

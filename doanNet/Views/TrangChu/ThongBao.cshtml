@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "ThongBao";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+
+<link href="~/Content/css/Trangchu.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row" style="padding: 50px 50px 50px 0px">
+        <h2>THÔNG BÁO</h2>
+        <hr style="border-top: 4px solid blue;">
+    </div>
+    @{
+        var idPostList = new List<int>();
+
+        foreach (var item in ViewBag.CategoryBridge)
+        {
+            if (item.IDCategory == 8)
+            {
+                idPostList.Add(item.IDPost);
+            }
+        }
+    }
+    @if (idPostList.Any())
+    {
+        for (int i = 0; i < idPostList.Count; i += 3)
+        {
+            <div class="container">
+                <div class="row">
+                    @for (int j = i; j < Math.Min(i + 3, idPostList.Count); j++)
+                    {
+                        foreach (var post in ViewBag.Post)
+                        {
+                            if (@idPostList[j] == post.IDPost)
+                            {
+                                <div class="col-xs-12 col-sm-4">
+                                    <div class="card">
+                                        <a class="img-card" href="@post.Meta">
+                                            <img src="~/Content/upload/img/news/@post.PostImage" />
+                                        </a>
+                                        <div class="card-content">
+                                            <h4 class="card-title">
+                                                <a href="@post.Meta">
+                                                    @post.PostTitle
+                                                </a>
+                                            </h4>
+                                            <div id="someDiv">
+                                                <p class="">
+
+                                                    @Html.Raw(post.PostDetail)
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-read-more">
+                                            <a href="@post.Meta" class="btn btn-link btn-block">
+                                                Read More
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    }
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+
+

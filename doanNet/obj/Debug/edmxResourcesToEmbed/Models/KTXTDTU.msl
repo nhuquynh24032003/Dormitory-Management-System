@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="KTXTDTUModelStoreContainer" CdmEntityContainer="KTXTDTUEntities2">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="IDTeacher" ColumnName="IDTeacher" />
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+          <ScalarProperty Name="MSSV" ColumnName="MSSV" />
+          <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Available" ColumnName="Available" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AccountTypes">
+      <EntityTypeMapping TypeName="KTXTDTUModel.AccountType">
+        <MappingFragment StoreEntitySet="AccountType">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="TypeDescription" ColumnName="TypeDescription" />
+          <ScalarProperty Name="IDAccountType" ColumnName="IDAccountType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Attendances">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Attendance">
+        <MappingFragment StoreEntitySet="Attendance">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Reason" ColumnName="Reason" />
+          <ScalarProperty Name="IsAttend" ColumnName="IsAttend" />
+          <ScalarProperty Name="IDAttendance" ColumnName="IDAttendance" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AttendanceBridges">
+      <EntityTypeMapping TypeName="KTXTDTUModel.AttendanceBridge">
+        <MappingFragment StoreEntitySet="AttendanceBridge">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+          <ScalarProperty Name="IDAttendance" ColumnName="IDAttendance" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="ColorChip" ColumnName="ColorChip" />
+          <ScalarProperty Name="CategoryTitle" ColumnName="CategoryTitle" />
+          <ScalarProperty Name="IDCategory" ColumnName="IDCategory" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CategoryBridges">
+      <EntityTypeMapping TypeName="KTXTDTUModel.CategoryBridge">
+        <MappingFragment StoreEntitySet="CategoryBridge">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDPost" ColumnName="IDPost" />
+          <ScalarProperty Name="IDCategory" ColumnName="IDCategory" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contracts">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Contract">
+        <MappingFragment StoreEntitySet="Contract">
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+          <ScalarProperty Name="TimeExpired" ColumnName="TimeExpired" />
+          <ScalarProperty Name="xetduyet" ColumnName="xetduyet" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IDPriority" ColumnName="IDPriority" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDPlace" ColumnName="IDPlace" />
+          <ScalarProperty Name="ProfilePlace" ColumnName="ProfilePlace" />
+          <ScalarProperty Name="IDCitizen" ColumnName="IDCitizen" />
+          <ScalarProperty Name="IDContract" ColumnName="IDContract" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Faculties">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Faculty">
+        <MappingFragment StoreEntitySet="Faculty">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="NameFalculty" ColumnName="NameFalculty" />
+          <ScalarProperty Name="IDFalcuty" ColumnName="IDFalcuty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Fees">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Fee">
+        <MappingFragment StoreEntitySet="Fee">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDRoom" ColumnName="IDRoom" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+          <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IDFee" ColumnName="IDFee" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Log">
+        <MappingFragment StoreEntitySet="Log">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="DateDone" ColumnName="DateDone" />
+          <ScalarProperty Name="IDFee" ColumnName="IDFee" />
+          <ScalarProperty Name="IDLog" ColumnName="IDLog" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Menus">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Menu">
+        <MappingFragment StoreEntitySet="Menu">
+          <ScalarProperty Name="FatherID" ColumnName="FatherID" />
+          <ScalarProperty Name="TextMenu" ColumnName="TextMenu" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Mistakes">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Mistake">
+        <MappingFragment StoreEntitySet="Mistake">
+          <ScalarProperty Name="ImageDescription" ColumnName="ImageDescription" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDRoom" ColumnName="IDRoom" />
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+          <ScalarProperty Name="BedID" ColumnName="BedID" />
+          <ScalarProperty Name="TimeCaught" ColumnName="TimeCaught" />
+          <ScalarProperty Name="MistakeDes" ColumnName="MistakeDes" />
+          <ScalarProperty Name="IDMistake" ColumnName="IDMistake" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Places">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Place">
+        <MappingFragment StoreEntitySet="Place">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IDPlace" ColumnName="IDPlace" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Posts">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Post">
+        <MappingFragment StoreEntitySet="Post">
+          <ScalarProperty Name="PostDetail" ColumnName="PostDetail" />
+          <ScalarProperty Name="PostImage" ColumnName="PostImage" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+          <ScalarProperty Name="PostTitle" ColumnName="PostTitle" />
+          <ScalarProperty Name="IDPost" ColumnName="IDPost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Priorities">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Priority">
+        <MappingFragment StoreEntitySet="Priority">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="PriorityDescription" ColumnName="PriorityDescription" />
+          <ScalarProperty Name="IDPriority" ColumnName="IDPriority" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rooms">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Room">
+        <MappingFragment StoreEntitySet="Room">
+          <ScalarProperty Name="PriceRoom" ColumnName="PriceRoom" />
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="RoomType" ColumnName="RoomType" />
+          <ScalarProperty Name="Building" ColumnName="Building" />
+          <ScalarProperty Name="Floor" ColumnName="Floor" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IDRoom" ColumnName="IDRoom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SinhViens">
+      <EntityTypeMapping TypeName="KTXTDTUModel.SinhVien">
+        <MappingFragment StoreEntitySet="SinhVien">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="IDRoom" ColumnName="IDRoom" />
+          <ScalarProperty Name="IDFalcuty" ColumnName="IDFalcuty" />
+          <ScalarProperty Name="MSSV" ColumnName="MSSV" />
+          <ScalarProperty Name="GraduateYear" ColumnName="GraduateYear" />
+          <ScalarProperty Name="AttendYear" ColumnName="AttendYear" />
+          <ScalarProperty Name="AttendDate" ColumnName="AttendDate" />
+          <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="IDSinhVien" ColumnName="IDSinhVien" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Teachers">
+      <EntityTypeMapping TypeName="KTXTDTUModel.Teacher">
+        <MappingFragment StoreEntitySet="Teacher">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="IDTeacher" ColumnName="IDTeacher" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TrucCongs">
+      <EntityTypeMapping TypeName="KTXTDTUModel.TrucCong">
+        <MappingFragment StoreEntitySet="TrucCong">
+          <ScalarProperty Name="Hide" ColumnName="Hide" />
+          <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Order" ColumnName="Order" />
+          <ScalarProperty Name="DateApply" ColumnName="DateApply" />
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+          <ScalarProperty Name="IDTruc" ColumnName="IDTruc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+
+<link href="~/Content/TeacherPage/ChoosingRoom.min.css" rel="stylesheet" />
+<div class="filtering_place">
+    <select class="filtering_item" placeholder="Tòa">
+        <option value="" disabled selected>Tòa</option>
+        <option value="hurr">Durr</option>
+    </select>
+    <select class="filtering_item" placeholder="Tầng">
+        <option value="" disabled selected>Tầng</option>
+        <option value="hurr">Durr</option>
+    </select>
+    <select class="filtering_item" placeholder="Loại Phòng">
+        <option value="" disabled selected>Loại Phòng</option>
+        <option value="hurr">Durr</option>
+    </select>
+    <select class="filtering_item" placeholder="Trạng thái">
+        <option value="" disabled selected>Trạng thái</option>
+        <option value="hurr">Durr</option>
+
+    </select>
+    <button data-bs-toggle="modal"
+            data-bs-target="#ModalChooseCategory"
+            class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+            style="background-color: #1C63EE;margin:0">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</div>
+<div class="choosing_room_place">
+    @{var number = 0; }
+    @foreach (var item in ViewBag.rooms)
+    {
+        if (item.RoomType > @ViewBag.ArrNumOfStudent[number])
+        {
+            <div class="choosing_room_item" id=@item.IDRoom>
+                <div class="display_info">
+                    <p class="name_of_room"id="@item.Name">Phòng @item.Name</p>
+                    <div class="display_side_info_title" style="display:flex">
+                        <div class="side_info">
+                            <p class="side_heading_place">Tòa</p>
+                            <p class="side_content_place">@item.Building</p>
+                        </div>
+                        <div class="side_info">
+                            <p class="side_heading_place">Tầng</p>
+                            <p class="side_content_place">@item.Floor</p>
+                        </div>
+                        <div class="side_info">
+                            <p class="side_heading_place">Loại Phòng</p>
+                            <p class="side_content_place" >@item.RoomType người</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="choosing_room_status">
+                    <div class="room_info ">
+                        <div class="side_info">
+                            <p class="heading_number_tag">Số lượng</p>
+                            <p class="number_des">@ViewBag.ArrNumOfStudent[number] <span>/</span> 8</p>
+                        </div>
+                    </div>
+                    <div class="btn_place" style="text-align:center">
+                        <button class="btn_choose" id=@item.IDRoom>
+                            Chọn
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="choosing_room_item">
+                <div class="display_info">
+                    <p class="name_of_room">Phòng @item.Name</p>
+                    <div class="display_side_info_title" style="display:flex">
+                        <div class="side_info">
+                            <p class="side_heading_place">Tòa</p>
+                            <p class="side_content_place">@item.Building</p>
+                        </div>
+                        <div class="side_info">
+                            <p class="side_heading_place">Tầng</p>
+                            <p class="side_content_place">@item.Floor</p>
+                        </div>
+                        <div class="side_info">
+                            <p class="side_heading_place">Loại Phòng</p>
+                            <p class="side_content_place">@item.RoomType người</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="choosing_room_status">
+                    <div class="room_info not_available">
+                        <div class="side_info">
+                            <p class="heading_number_tag">Số lượng</p>
+                            <p class="number_des">@ViewBag.ArrNumOfStudent[number] <span>/</span> 8</p>
+                        </div>
+                    </div>
+                    <div class="btn_place" style="text-align:center">
+                        <button class="btn_choose not_available">
+                            Hết chỗ
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        }
+        number++;
+
+    }
+</div>
+<script>
+    if (!sessionStorage.getItem("StudentTempData") && !sessionStorage.getItem("StudentTempDataEdit")) {
+    const returnhref = '@Url.Action("SinhVien", "QuanLy")';
+    window.location.href = returnhref;
+    }
+
+         $(".btn_choose").click(function (e){
+             e.preventDefault();
+                 if (sessionStorage.getItem("StudentTempData")) {
+                     if (!$(this).hasClass('not_available')) {
+                         const SinhVienData = JSON.parse(sessionStorage.getItem("StudentTempData"))
+                         var roomId = $(this).attr('id'); // Retrieve the RoomID from the ID of the button
+                         var roomName = $(this).closest('.choosing_room_item').find('.name_of_room').attr("id");
+                         SinhVienData.RoomID = roomId;
+                         SinhVienData.RoomName = roomName;
+                         sessionStorage.setItem("StudentTempData", JSON.stringify(SinhVienData))
+                         const returnhref = '@Url.Action("SinhVien", "QuanLy")';
+                         window.location.href = returnhref;
+                     }
+                 }
+                 if (sessionStorage.getItem("StudentTempDataEdit")) {
+                     if (!$(this).hasClass('not_available')) {
+                         const SinhVienData = JSON.parse(sessionStorage.getItem("StudentTempDataEdit"))
+                         var roomId = $(this).attr('id'); // Retrieve the RoomID from the ID of the button
+                         var roomName = $(this).closest('.choosing_room_item').find('.name_of_room').attr("id");
+                         SinhVienData.RoomID = roomId;
+                         SinhVienData.RoomName = roomName;
+                         sessionStorage.setItem("StudentTempDataEdit", JSON.stringify(SinhVienData))
+                         const returnhref = '@Url.Action("SinhVien", "QuanLy")';
+                         window.location.href = returnhref;
+                     }
+                 }
+             }
+         )
+</script>
+<div style="text-align:center">
+    <nav aria-label="Page navigation example" class="base-pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-active page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">...</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item"><a class="page-link" href="#">6</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>

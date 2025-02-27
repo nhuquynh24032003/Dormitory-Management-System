@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewBag.Title = "QuanLyTaiKhoan";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+
+<div class="container">
+    <div class="modal fade" id="AddingAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center pt-4 pb-3">
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">MSSV</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control MSSV_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Họ và Tên sinh viên</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control typing_name" disabled />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Password</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control Password_Place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Loại tài khoản</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <select class="AccountType_id" id="AccountType_id" style="width: 100%">
+                                @foreach (var item in ViewBag.AccountType)
+                                {
+                                    if (@item.IDAccountType != 4)
+                                    {
+                                        <option value="@item.IDAccountType">@item.TypeDescription</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary add_account_btn">Thêm tài khoản</button>
+                </div>
+                <script>
+                    $(document).ready(() => {
+                        $(".MSSV_Place").blur(async () => {
+                            const mssv = $(".MSSV_Place").val();
+                            const SinhVienData = await findSinhVienByMSSV(mssv);
+                            if (SinhVienData) {
+                                $(".typing_name").val(SinhVienData.FullName);
+                                $(".typing_name").attr("id", SinhVienData["IDSinhVien"]);
+                            }
+                            else {
+                                $(".typing_name").val("Không tìm thấy sinh viên");
+                            }
+                        })
+                        $(".add_account_btn").click(() => {
+
+                            const AccountData = {
+                                IDSinhVien: $(".typing_name").attr("id"),
+                                MSSV: $(".MSSV_Place").val(),
+                                Password: $('.Password_Place').val(),
+                                AccountTypeID: $('.AccountType_id').val(),
+                            }
+                            postAccountStudent(AccountData)
+                        })
+                    })
+                </script>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-12 text-center" style="padding:20px">
+        <h2 style="font-weight: bold">QUẢN LÝ TÀI KHOẢN</h2>
+    </div>
+    <div class="row">
+        <div class="function_btn"
+             style=" display: flex;justify-content: end; margin-top: 8px; margin-bottom: 8px; margin-right: 32px;">
+            <div class="add_btn" style="margin: 10px">
+                <!-- Colored mini FAB button -->
+                <button onclick="showModalAdding()"
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+                        style="background-color: #35d66c">
+                    <i class="fa-solid fa-plus" style="margin: 10px"></i>
+                </button>
+            </div>
+            <script>
+                function showModalAdding() {
+                    var myModal = new bootstrap.Modal(document.getElementById('AddingAccount'));
+                    myModal.show();
+                }
+
+            </script>
+
+        </div>
+        <table class="table" id="datatableform" style="text-align: center">
+            <thead>
+                <tr>
+                    <th scope="col">MSSV</th>
+                    <th scope="col">Mật khẩu</th>
+                    <th scope="col">Tên Sinh Viên</th>
+                    <th scope="col">Loại tài khoản</th>
+                    <th scope="col">Tình trạng tài khoản</th>
+                    <th scope="col">Nâng lên tài khoản tự quản</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Account)
+                {
+                    var AccountTypeName = "";
+                    var tenSV = "";
+                    <tr>
+                        <th>@item.MSSV</th>
+                        <td>@item.Password</td>
+
+                        <td>
+
+                            @foreach (var sinhvien in ViewBag.sinhviens)
+                            {
+                                if (sinhvien.IDSinhVien == item.IDSinhVien)
+                                {
+                                    tenSV = sinhvien.FullName;
+                                }
+                            }
+                            @tenSV
+                        </td>
+                        <td>
+                            @foreach (var AccountType in ViewBag.AccountType)
+                            {
+                                if (item.AccountTypeID == AccountType.IDAccountType)
+                                {
+                                    AccountTypeName = AccountType.TypeDescription;
+                                }
+                            }
+                            @AccountTypeName
+                        </td>
+                        @if (item.Hide == 0)
+                        {
+                            <td>
+                                <i class="fa-solid fa-lock pointer-event" id="@item.IDAccount" onclick="showModal(this.id)"></i>
+
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <i class="fa-solid fa-lock-open pointer-event"  id="@item.IDAccount" onclick="showModal(this.id)"></i>
+                            </td>
+                        }
+                        @if (item.AccountTypeID == 6)
+                        {
+                            <td>
+                                <button class="btn btn_approve pointer-event upgrade_account"  id="@item.AccountTypeID">
+                                   <img style="width:20px" src="~/Images/up-arrow.png" />
+                                </button>
+                            </td>
+                        }
+                        else if (item.AccountTypeID == 4)
+                        {
+                            <td>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <button class="btn btn_approve pointer-event" id="@item.AccountTypeID">
+                                    <img style="width:20px" src="~/Images/refresh.png" />
+                                </button>
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn thay đổi tình trạng tài khoản này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary changing_status_btn" id="confirmChange">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var BtnStatusClicked=0;
+    function showModal(id) {
+        var myModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        BtnStatusClicked=id
+        myModal.show();
+    }
+    $(".upgrade_account").click(async function (){
+        var IDAccount = $(this).attr("id");
+        await promotedAccountByAccountID(IDAccount);
+        window.location.reload();
+    })
+    $(".changing_status_btn").click(async function () {
+        var IDAccount = BtnStatusClicked;
+        await changingStatus(IDAccount);
+        window.location.reload();
+
+    })
+</script>

@@ -1,0 +1,502 @@
+﻿
+@{
+    ViewBag.Title = "QuanLySinhVien";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+
+<div class="container">
+    <div class="col-12 text-center" style="padding:20px">
+        <h2 style="font-weight: bold">QUẢN LÝ SINH VIÊN</h2>
+    </div>
+    <select name="khoa" id="khoa">
+        <option value="0" disabled selected>Khoa</option>
+        @foreach (var Khoa in ViewBag.falcuties)
+        {
+
+            <option value="@Khoa.NameFalculty">@Khoa.NameFalculty</option>
+        }
+    </select>
+    <div class="filtering_place">
+        <span>Thời gian vào KTX: </span><input type="date" class="date_filtering_place" />
+    </div>
+    <div class="row">
+        <div class="function_btn"
+             style=" display: flex;justify-content: end; margin-top: 8px; margin-bottom: 8px; margin-right: 32px;">
+            <div class="add_btn" style="margin: 10px">
+                <!-- Colored mini FAB button -->
+                <button onclick="showModal()"
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+                        style="background-color: #35d66c">
+                    <i class="fa-solid fa-plus" style="margin: 10px"></i>
+                </button>
+            </div>
+            <script>
+                function showModal() {
+                    var myModal = new bootstrap.Modal(document.getElementById('ThemSinhVien'));
+                    myModal.show();
+                }
+            </script>
+
+        </div>
+        <div class="modal fade" id="ThemSinhVien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row align-items-center pt-4 pb-3">
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">MSSV</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control MSSV-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Họ và tên Sinh viên</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control FullName-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Địa chỉ</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control Address-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Ngày sinh</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="date" class="form-control BirthDay-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Thời gian vào KTX</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="date" class="form-control AttendDate-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Năm học</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="year1" class="form-label"></label>
+                                        <input type="number" class="form-control AttendYear-Place" id="year1" placeholder="YYYY" min="1900" max="2099" step="1">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="year2" class="form-label"></label>
+                                        <input type="number" class="form-control GraduateYear-Place" id="year2" placeholder="YYYY" min="1900" max="2099" step="1">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Khoa</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <select name="khoa" id="khoa" class="IDFalcuty-Place" style="width: 100%">
+                                    @foreach (var item in ViewBag.falcuties)
+                                    {
+                                        <option value="@item.IDFalcuty">@item.NameFalculty</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Tên Phòng</h6>
+                            </div>
+                            <div class="col-md-8 mt-2 pe-5 room-function-place" style="display:flex;align-content:center">
+
+
+                            </div>
+                            <script>
+
+                                const SinhVienData = JSON.parse(sessionStorage.getItem("StudentTempData"))
+                                if (SinhVienData && SinhVienData.RoomID) {
+                                    const editHTML = `
+                                                                                                <input type="text" value=${SinhVienData.RoomName} id=${SinhVienData.RoomID} style="width:20%;margin-top:0; margin-right:12px" class="form-control IDRoom-Place" readonly />
+                                                                                                <div class="Choosing_Place">
+                                                                                                    <a href="#" class="Edit-Choosing-Btn">
+                                                                                                        <button type="button" class="btn btn-primary Choosing_Room">Chọn lại phòng</button>
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                                `
+                                    $(".room-function-place").append(editHTML);
+                                }
+                                else {
+                                    const ChoosingHTML = `
+                                                                                                <a href="#">
+                                                                                                <button type="button" class="btn btn-primary Choosing_Room">Chọn phòng</button>
+                                                                                                </a>
+                                                                                                `
+                                    $(".room-function-place").append(ChoosingHTML);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary add-student">Thêm sinh viên</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            $(".Choosing_Room").click((e) => {
+                e.preventDefault();
+                 const SinhVienData = {
+                        FullName: $(".FullName-Place").val(),
+                        Address: $(".Address-Place").val(),
+                        BirthDay: $(".BirthDay-Place").val(),
+                        AttendDate: $(".AttendDate-Place").val(),
+                        AttendYear: $(".AttendYear-Place").val(),
+                        GraduateYear: $(".GraduateYear-Place").val(),
+                        MSSV: $(".MSSV-Place").val(),
+                        IDFalcuty: $(".IDFalcuty-Place").val(),
+                    }
+                hrefChoosingRoom='@Url.Action("ChoosingRoom", "QuanLy")';
+                window.sessionStorage.setItem("StudentTempData", JSON.stringify(SinhVienData));
+                window.location.href = hrefChoosingRoom;
+            })
+        </script>
+        <div class="modal fade" id="EditSinhVien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row align-items-center pt-4 pb-3">
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">MSSV</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control MSSV-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Họ và tên Sinh viên</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control FullName-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Địa chỉ</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="text" class="form-control Address-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Ngày sinh</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="date" class="form-control BirthDay-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Thời gian vào KTX</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <input type="date" class="form-control AttendDate-Place" />
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Năm học</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="year1" class="form-label"></label>
+                                        <input type="number" class="form-control AttendYear-Place" id="year1" placeholder="YYYY" min="1900" max="2099" step="1">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="year2" class="form-label"></label>
+                                        <input type="number" class="form-control GraduateYear-Place" id="year2" placeholder="YYYY" min="1900" max="2099" step="1">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Khoa</h6>
+                            </div>
+                            <div class="col-md-8 pe-5">
+                                <select name="khoa" id="khoa" class="IDFalcuty-Place" style="width: 100%">
+                                    @foreach (var item in ViewBag.falcuties)
+                                    {
+                                        <option value="@item.IDFalcuty">@item.NameFalculty</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4 ps-5">
+                                <h6 class="mb-0 font-weight-bold">Tên phòng</h6>
+                            </div>
+                            <div class="col-md-8 mt-2 pe-5" style="display:flex;align-content:center">
+                                <input type="text" style="width:20%;margin-top:0; margin-right:12px" class="form-control IDRoom-Place" readonly />
+                                <div class="Choosing_Place">
+                                    <a href="#">
+                                        <button type="button" class="btn btn-primary Choosing_Room_Edit_Modal">Chọn lại phòng</button>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary  confirm-change">Sửa sinh viên</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script>
+            $(".Choosing_Room_Edit_Modal").click((e) => {
+                e.preventDefault();
+                 const SinhVienData = {
+                     FullName: $("#EditSinhVien .FullName-Place").val(),
+                     Address: $("#EditSinhVien .Address-Place").val(),
+                     BirthDay: $("#EditSinhVien .BirthDay-Place").val(),
+                     AttendDate: $("#EditSinhVien .AttendDate-Place").val(),
+                     AttendYear: $("#EditSinhVien .AttendYear-Place").val(),
+                     GraduateYear: $("#EditSinhVien .GraduateYear-Place").val(),
+                     MSSV: $("#EditSinhVien .MSSV-Place").val(),
+                     IDFalcuty: $("#EditSinhVien .IDFalcuty-Place").val(),
+                    }
+                hrefChoosingRoom='@Url.Action("ChoosingRoom", "QuanLy")';
+                window.sessionStorage.setItem("StudentTempDataEdit", JSON.stringify(SinhVienData));
+                window.location.href = hrefChoosingRoom;
+            })
+            $(".Choosing_Room").click((e) => {
+                e.preventDefault();
+                const SinhVienData = {
+                        FullName: $(".FullName-Place").val(),
+                        Address: $(".Address-Place").val(),
+                        BirthDay: $(".BirthDay-Place").val(),
+                        AttendDate: $(".AttendDate-Place").val(),
+                        AttendYear: $(".AttendYear-Place").val(),
+                        GraduateYear: $(".GraduateYear-Place").val(),
+                        MSSV: $(".MSSV-Place").val(),
+                        IDFalcuty: $(".IDFalcuty-Place").val(),
+                    }
+                hrefChoosingRoom='@Url.Action("ChoosingRoom", "QuanLy")';
+                window.sessionStorage.setItem("StudentTempData", JSON.stringify(SinhVienData));
+                window.location.href = hrefChoosingRoom;
+            })
+        </script>
+        <div class="row">
+            <table class="table" id="datatableform" style="width:100%">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">MSSV</th>
+                        <th scope="col">Họ và tên Sinh viên</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Ngày sinh</th>
+                        <th scope="col">Thời gian vào KTX</th>
+                        <th scope="col">Năm học</th>
+                        <th scope="col">Khoa</th>
+                        <th scope="col">Phòng</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @functions {
+                        // Define the formatDateTime function
+                        string formatDateTime(DateTime dateTime)
+                        {
+                            // Implement your logic here to format the datetime string
+                            // For example:
+
+                            return dateTime.ToString("dd/MM/yyyy");
+                        }
+                    }
+                    @{var number = 1; }
+                    @foreach (var item in ViewBag.sinhviens)
+                    {
+                        var falcutiesName = "";
+                        var roomName = "";
+                        <tr>
+                            <td>@Html.Raw(number++)</td>
+                            <td>@item.MSSV</td>
+                            <td>@item.FullName</td>
+                            <td>@item.Address</td>
+                            <td>@MyHelper.FormatDate(item.BirthDay)</td>
+                            <td>@formatDateTime(item.AttendDate)</td>
+                            <td>@item.AttendYear - @item.GraduateYear</td>
+                            <td>
+                                @foreach (var falcuty in ViewBag.falcuties)
+                                {
+                                    if (item.IDFalcuty == falcuty.IDFalcuty)
+                                    {
+                                        falcutiesName = falcuty.NameFalculty;
+                                    }
+                                }
+                                @falcutiesName
+                            </td>
+                            <td>
+                                @foreach (var room in ViewBag.rooms)
+                                {
+                                    if (room.IDRoom == item.IDRoom)
+                                    {
+                                        roomName = room.Name;
+                                    }
+                                }
+                                @roomName
+                            </td>
+                            <td>
+                                <i class="fa-regular fa-pen-to-square edit_modal_open_btn" style="color: blue;" id="@item.IDSinhVien"></i>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+
+<script>
+    $(document).ready(async () => {
+        /* Checking Student*/
+        if (sessionStorage.getItem("StudentTempData")) {
+            const StudentTempData = JSON.parse(sessionStorage.getItem("StudentTempData"))
+            $(".FullName-Place").val(StudentTempData.FullName),
+                $(".Address-Place").val(StudentTempData.Address),
+                $(".BirthDay-Place").val(StudentTempData.BirthDay),
+                $(".AttendDate-Place").val(StudentTempData.AttendDate),
+                $(".AttendYear-Place").val(StudentTempData.AttendYear),
+                $(".GraduateYear-Place").val(StudentTempData.GraduateYear),
+                $(".MSSV-Place").val(StudentTempData.MSSV),
+                $(".IDFalcuty-Place").val(StudentTempData.IDFalcuty)
+            showModal();
+        }
+        if (sessionStorage.getItem("StudentTempDataEdit")) {
+            const StudentTempData = JSON.parse(sessionStorage.getItem("StudentTempDataEdit"))
+            $("#EditSinhVien .FullName-Place").val(StudentTempData.FullName),
+                $("#EditSinhVien .Address-Place").val(StudentTempData.Address),
+                $("#EditSinhVien .BirthDay-Place").val(StudentTempData.BirthDay),
+                $("#EditSinhVien .AttendDate-Place").val(StudentTempData.AttendDate),
+                $("#EditSinhVien .AttendYear-Place").val(StudentTempData.AttendYear),
+                $("#EditSinhVien .GraduateYear-Place").val(StudentTempData.GraduateYear),
+                $("#EditSinhVien .MSSV-Place").val(StudentTempData.MSSV),
+                $("#EditSinhVien .IDFalcuty-Place").val(StuwdentTempData.IDFalcuty)
+            $("#EditSinhVien .IDRoom-Place").val(StudentTempData.RoomName)
+            $("#EditSinhVien .IDRoom-Place").attr("id", StudentTempData.RoomName)
+
+            var myModal = new bootstrap.Modal(document.getElementById('EditSinhVien'));
+            myModal.show();
+        }
+        let table = new DataTable('#datatableform');
+        //Thêm Sinh Viên
+        const addStudent = async () => {
+            /*
+            public int IDSinhVien { get; set; }
+        public string FullName { get; set; }
+        public string Address { get; set; }
+        public System.DateTime BirthDay { get; set; }
+        public System.DateTime AttendDate { get; set; }
+        public int AttendYear { get; set; }
+        public int GraduateYear { get; set; }
+        public string MSSV { get; set; }
+        public int IDFalcuty { get; set; }
+        public int IDContract { get; set; }
+        public int IDRoom { get; set; }
+            */
+            const SinhVienData = {
+                FullName: $(".FullName-Place").val(),
+                Address: $(".Address-Place").val(),
+                BirthDay: $(".BirthDay-Place").val(),
+                AttendDate: $(".AttendDate-Place").val(),
+                AttendYear: $(".AttendYear-Place").val(),
+                GraduateYear: $(".GraduateYear-Place").val(),
+                MSSV: $(".MSSV-Place").val(),
+                IDFalcuty: $(".IDFalcuty-Place").val(),
+                IDRoom: $('.IDRoom-Place').attr("id")
+            }
+            let result = await PostSinhVien(SinhVienData);
+            document.location.reload();
+        }
+        $(".add-student").click(async () => {
+            await addStudent();
+            sessionStorage.removeItem("StudentTempData");
+        });
+
+
+        //Sửa Sinh Viên
+        const extractDate = (datetimeValue) => {
+            const date = new Date(datetimeValue); // Convert datetime string to Date object
+            const year = date.getFullYear(); // Get year
+            const month = ('0' + (date.getMonth() + 1)).slice(-2); // Get month (add 1 as month index starts from 0, and pad with 0 if single digit)
+            const day = ('0' + date.getDate()).slice(-2); // Get day (pad with 0 if single digit)
+            return `${year}-${month}-${day}`; // Return formatted date string
+        };
+        const fillingEditModal = async (event) => {
+            const id = event.target.id;
+            const SinhVienFinding = await findSinhVienById(id);
+            $("#EditSinhVien .FullName-Place").val(SinhVienFinding.FullName);
+            $("#EditSinhVien .Address-Place").val(SinhVienFinding.Address);
+            $("#EditSinhVien .BirthDay-Place").val(extractDate(SinhVienFinding.BirthDay));
+            $("#EditSinhVien .AttendDate-Place").val(extractDate(SinhVienFinding.AttendDate));
+            $("#EditSinhVien .AttendYear-Place").val(SinhVienFinding.AttendYear);
+            $("#EditSinhVien .GraduateYear-Place").val(SinhVienFinding.GraduateYear);
+            $("#EditSinhVien .MSSV-Place").val(SinhVienFinding.MSSV);
+            $("#EditSinhVien .IDFalcuty-Place").val(SinhVienFinding.IDFalcuty)
+            $("#EditSinhVien .IDRoom-Place").val(SinhVienFinding.IDRoom)
+            $("#EditSinhVien .confirm-change").attr("id", event.target.id)
+            var myModal = new bootstrap.Modal(document.getElementById('EditSinhVien'));
+            myModal.show();
+        }
+        $(".edit_modal_open_btn").click(fillingEditModal)
+        const changeStudent = async (event) => {
+            const id = event.target.id
+            const SinhVienData = {
+                FullName: $("#EditSinhVien .FullName-Place").val(),
+                Address: $("#EditSinhVien .Address-Place").val(),
+                BirthDay: $("#EditSinhVien .BirthDay-Place").val(),
+                AttendDate: $("#EditSinhVien .AttendDate-Place").val(),
+                AttendYear: $("#EditSinhVien .AttendYear-Place").val(),
+                GraduateYear: $("#EditSinhVien .GraduateYear-Place").val(),
+                MSSV: $("#EditSinhVien .MSSV-Place").val(),
+                IDFalcuty: $("#EditSinhVien .IDFalcuty-Place").val(),
+                IDRoom: $('#EditSinhVien .IDRoom-Place').id()
+            }
+            let result = await PutSinhVien(id, SinhVienData);
+            document.location.reload();
+        }
+        $(".confirm-change").click(changeStudent)
+    })
+    $('#khoa').on('change', function (e) {
+        var statusval = $(this).val();
+        table.column(7).search(statusval).draw();
+    })
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(5).search(newDateString, true, false).draw();
+    })
+</script>

@@ -1,0 +1,101 @@
+﻿@{
+    ViewBag.Title = "DoiMatKhau";
+    Layout = "~/Views/Shared/layout3.cshtml";
+}
+@using System.Web.Optimization
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .corner-image {
+        padding-top: 10px;
+        padding-right: 50px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 128px;
+        height: auto;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .login-page {
+        width: 100%;
+        padding-top: 50px;
+        display: inline-block;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-right i {
+        font-size: 100px;
+    }
+</style>
+
+
+<div class="container-fluid" style="background-color: darkblue; height:150px">
+    <h1 style="font-weight: bold; color: white; text-align: center; padding-top: 50px;">ĐỔI MẬT KHẨU</h1>
+    <img src="~/Images/reset-password.png" class="corner-image">
+</div>
+<section class="vh-90">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-md-8 col-lg-7 col-xl-6">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                     class="img-fluid" alt="Phone image">
+            </div>
+            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+
+                <!-- Password input -->
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form1Example23">Mật khẩu mới</label>
+                    <input type="password" id="form1Example23" class="form-control form-control-lg password_place" />
+                </div>
+
+                <!-- Password input -->
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <label class="form-label" for="form1Example23">Xác nhận mật khẩu</label>
+                    <input type="password" id="form1Example23" class="form-control form-control-lg password_new_place" />
+                </div>
+
+                <!-- Submit button -->
+                <div class="row">
+                    <div class="col-6">
+                        <a href="/TrangChu/DangNhap/"><i class="fa-solid fa-arrow-left" style="padding-right: 10px"></i>Trở về</a>
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block float-end btn_change">Đổi mật khẩu</button>
+
+                    </div>
+                </div>
+                <script>
+                        $(document).ready(() => {
+                            $(".btn_change").click(async () => {
+                                if ($(".password_new_place").val() == $(".password_place").val()) {
+                                    const IDAccount = sessionStorage.getItem("IDAccount")
+                                    await changingPassword(IDAccount, $(".password_new_place").val());
+                                const AccountTypeID = sessionStorage.getItem("AccountTypeID")
+                                    if (AccountTypeID == 6) {
+                                            window.location.href="@Url.Action("Loi", "SinhVien")"
+                                        }
+                                    if (AccountTypeID == 5) {
+                                            window.location.href="/SinhVienTuQuan/Default/DiemDanhKTX"
+                                        }
+                                }
+
+                            })
+                        })
+                </script>
+
+            </div>
+        </div>
+    </div>
+</section>

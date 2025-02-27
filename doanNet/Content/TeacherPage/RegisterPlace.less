@@ -1,0 +1,38 @@
+﻿@font_family_1: Arial, Helvetica, sans-serif;
+@font_family_2: 'Montserrat', sans-serif;
+@font_family_3: 'Geneva', sans-serif;
+@font_family_4: 'Geneva';
+@font_family_5: Montserrat;
+body {
+    .display_place {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .title-content {
+        font-family: @font_family_1;
+        border-bottom: solid 10px #A9CBFE;
+        padding-bottom: 12px;
+        margin: 12px;
+    }
+
+    .display_row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        border-bottom: solid #D9D9D9 1px;
+        margin: 8px 0;
+
+        .heading_tag {
+            margin: 0px;
+            width: 50%;
+            font-weight: 700;
+        }
+
+        .content_tag {
+            margin: 0px;
+            width: 50%;
+        }
+    }
+}

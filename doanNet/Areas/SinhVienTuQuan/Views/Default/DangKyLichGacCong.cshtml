@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewBag.Title = "DangKyLichGacCong";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" rel="stylesheet">
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/TrucCongAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2 style="font-weight: bold; padding: 20px; color: darkblue">ĐĂNG KÝ LỊCH GÁC CỔNG</h2>
+        </div>
+    </div>
+    <script>
+        function formatDateForRender(date) {
+            // Format the date as "dd/mm/yyyy"
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Months are zero-based
+            var year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        function formatDateForTaken(date) {
+            // Format the date as "dd/mm/yyyy"
+            var day = date.getDate();
+            var month = date.getMonth() + 1; // Months are zero-based
+            if (month < 10) {
+                month = '0' + month; // prepend '0' to the month if it's less than 10
+            }
+            if (day < 10) {
+                day = '0' + day; // prepend '0' to the day if it's less than 10
+            }
+            var year = date.getFullYear();
+            return `${year}-${month}-${day}`;
+        }
+
+        function getDayOfWeekVietnamese(dayIndex) {
+            // Define an array of Vietnamese days of the week
+            var daysOfWeek = [
+                "Chủ Nhật", // Sunday
+                "Thứ Hai",   // Monday
+                "Thứ Ba",    // Tuesday
+                "Thứ Tư",    // Wednesday
+                "Thứ Năm",   // Thursday
+                "Thứ Sáu",   // Friday
+                "Thứ Bảy"    // Saturday
+            ];
+            return daysOfWeek[dayIndex];
+        }
+        async function renderSinhVienGacCong(date) {
+
+            const AccountTrucCongData = await getTrucCongByDate(date);
+            if (AccountTrucCongData.length == 0) {
+                return `<td class="date_item">
+                          <div style="color: darkblue">
+                            <input id="${date}" type="radio" name="${date}" />
+                            <label for="${date}">Đăng ký</label>
+                          </div>
+                          <br />
+                          <br />
+                          <div style="color: darkblue">
+                            <input id="${date}" type="radio" name="${date}" />
+                            <label for="${date}">Đăng ký</label>
+                          </div>
+                        </td>
+                `
+            }
+            if (AccountTrucCongData.length == 1) {
+               
+                const IDAccountTrucData = AccountTrucCongData[0].IDAccount;
+                const IDAccount = sessionStorage.getItem("IDAccount") == null ? 1 : sessionStorage.getItem("IDAccount");
+
+                
+                const AccountData = await getAccountByID(IDAccountTrucData);
+                const SinhVienData = await findSinhVienById(AccountData.IDSinhVien);
+                const SinhVienName = SinhVienData.FullName;
+                if (IDAccountTrucData == IDAccount) {
+                    return `<td class="date_item">${SinhVienName}</td>`
+                }
+                return `<td class="date_item">${SinhVienName}<br /> <br /> <div style="color: darkblue">
+                            <input id="${date}" type="radio" name="${date}" />
+                            <label for="${date}">Đăng ký</label>
+                          </div></td>`
+            }
+            if (AccountTrucCongData.length == 2) {
+                const promises = AccountTrucCongData.map(async (Account) => {
+                    const IDAccountTrucData = Account.IDAccount;
+                    const AccountData = await getAccountByID(IDAccountTrucData);
+                    const SinhVienData = await findSinhVienById(AccountData.IDSinhVien);
+                    return SinhVienData.FullName;
+                });
+
+                // Wait for all promises to resolve
+                const SinhVienNameArr = await Promise.all(promises);
+
+                console.log(SinhVienNameArr);
+                return `<td class="date_item">${SinhVienNameArr[0]}<br /> <br /> ${SinhVienNameArr[1]}</td>`
+
+            }
+        }
+
+        async function displayNext3Days() {
+            var today = new Date();
+            let dateHTML = ``
+            let htmls = `<th scope="col" >Ca trực/Ngày trực</th>`
+            // Get the next 3 days
+            for (var i = 0; i < 3; i++) {
+                var nextDay = new Date(today);
+                nextDay.setDate(today.getDate() + i + 1); // Add 1 day, then 2 days, then 3 days
+                var dayOfWeek = nextDay.getDay(); // Get day of the week (0 = Sunday, 1 = Monday, ...)
+                var dayOfWeekVietnamese = getDayOfWeekVietnamese(dayOfWeek);
+                var formattedDate = formatDateForRender(nextDay);
+                const FormatedData = formatDateForTaken(nextDay);
+                dateHTML+=await renderSinhVienGacCong(FormatedData)
+                htmls += `<th>${dayOfWeekVietnamese} <br /> ${formattedDate}</th>`
+            }
+            $(".date_container").html(htmls);
+            $(".data_account_container").append(dateHTML);
+        };
+        $(document).ready(() => {
+            displayNext3Days();
+        })
+    </script>
+    <table class="table" style="font-size: 12px">
+        <thead>
+            <tr class=date_container style="background-color: darkblue; color: white">
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="data_account_container">
+                <td style="background-color: deepskyblue; color: darkblue; text-align: center">10:45am - 1:45pm</td>
+                
+            </tr>
+        </tbody>
+
+    </table>
+    <div class="d-flex justify-content-center align-items-center" style="padding: 20px">
+        <button class="btn btn-primary font-weight-bold submit_btn" style="border-radius: 0;padding-right: 10px">
+            <i class="fa-solid fa-pen-to-square" style="padding: 10px"></i>Đăng ký
+        </button>
+    </div>
+    <script>
+        $(document).ready(function () {
+            const storeArr = [];
+            // Attach click event listener to the submit button
+            $('.submit_btn').on('click', async function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                // Object to store selected options by date
+                var selectedOptionsByDate = {};
+
+                // Loop through each group of radio buttons by date
+                $('.date_item').each(function () {
+                    var date = $(this).prev().text().trim(); // Get the date from the previous td element
+
+                    // Find the selected radio button within the current group
+                    var selectedOption = $(this).find('input[type="radio"]:checked').attr("id");
+
+                    // Store the selected option in the object by date
+                    if (selectedOption) {
+                        storeArr.push(selectedOption);
+                    }
+                });
+                const dataArr = []
+                storeArr.forEach((item) => {
+                    dataArr.push({
+                        "IDAccount": sessionStorage.getItem("IDAccount") == null ? 1 : sessionStorage.getItem("IDAccount"),
+                        "DateApply":item
+                    })
+                })
+                if (dataArr.length!=0) {
+                    await postTrucCong(dataArr);
+                    window.location.reload();
+                }
+                
+                // Log the selected options by date
+
+               
+            });
+        });
+    </script>
+</div>
+

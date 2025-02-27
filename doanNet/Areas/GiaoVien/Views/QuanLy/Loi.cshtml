@@ -1,0 +1,138 @@
+﻿
+
+@{
+    ViewBag.title = "Vi phạm";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<style>
+    .edit_mistake{
+        cursor:pointer;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH LỖI</h2>
+        </div>
+    </div>
+    <div class="filtering_place">
+        <input type="date" class="date_filtering_place" />
+    </div>
+    <div class="function_btn" style="display: flex; justify-content: end; margin-top: 8px; margin-bottom: 8px; margin-right: 32px;">
+        <div class="add_btn" style="margin: 10px">
+            <!-- Colored mini FAB button -->
+            <button onclick="redirectToPage('/GiaoVien/QuanLy/GhiLoiKTX')"
+                    class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored"
+                    style="background-color: #35d66c">
+                <i class="fa-solid fa-plus" style="margin: 10px"></i>
+            </button>
+            <script>
+                function redirectToPage(url) {
+                    window.location.href = url;
+                }
+            </script>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr style="background-color: darkblue; color: white">
+                    <th scope="col">STT</th>
+                    <th scope="col">Chi tiết lỗi</th>
+                    <th scope="col">Họ và tên Sinh viên</th>
+                    <th scope="col">Tên người ghi nhận</th>
+                    <th scope="col">Số giường</th>
+                    <th scope="col">Tên phòng</th>
+                    <th scope="col">Thời gian ghi nhận lỗi</th>
+                    <th scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @functions {
+                    // Define the formatDateTime function
+                    string formatDateTime(DateTime dateTime)
+                    {
+                        // Implement your logic here to format the datetime string
+                        // For example:
+
+                        return dateTime.ToString("dd/MM/yyyy");
+                    }
+                }
+                @{var number = 1; }
+
+                @foreach (var item in ViewBag.mistakes)
+                {
+                    var tensv = "";
+                    var tenphong = "";
+                    <tr>
+                        <th>@Html.Raw(number++)</th>
+                        <td>@item.MistakeDes</td>
+                        <td>
+                            @foreach (var sinhvien in ViewBag.sinhviens)
+                            {
+                                if (sinhvien.IDSinhVien == item.IDSinhVien)
+                                {
+                                    tensv = sinhvien.FullName;
+                                }
+                            }
+                            @tensv
+                        </td>
+                        <td>
+                            @foreach (var svtq in ViewBag.sinhviens)
+                            {
+                                if (svtq.IDSinhVien == item.IDAccount)
+                                {
+                                    tensv = svtq.FullName;
+                                }
+                            }
+                            @tensv
+                        </td>
+                        <td>@item.BedID</td>
+                        <td>
+                            @foreach (var room in ViewBag.rooms)
+                            {
+                                if (room.IDRoom == item.IDRoom)
+                                {
+                                    tenphong = room.Name;
+                                }
+                            }
+                            @tenphong
+                        </td>
+                        <td>@formatDateTime(item.TimeCaught)</td>
+                        <td>
+                            <a href="@Url.Action("SuaLoiKTX", "QuanLy", new {id = @item.IDMistake})">
+                                <i class="fa-regular fa-pen-to-square" style="color: blue;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(6).search(newDateString, true, false).draw();
+    })
+</script>
+

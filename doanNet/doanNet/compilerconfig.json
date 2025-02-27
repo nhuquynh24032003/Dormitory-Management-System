@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "Content/TeacherPage/Base.css",
+    "inputFile": "Content/TeacherPage/Base.less"
+  },
+  {
+    "outputFile": "Content/TeacherPage/ChoosingRoom.css",
+    "inputFile": "Content/TeacherPage/ChoosingRoom.less"
+  },
+  {
+    "outputFile": "Content/TeacherPage/RegisterPlace.css",
+    "inputFile": "Content/TeacherPage/RegisterPlace.less"
+  }
+]

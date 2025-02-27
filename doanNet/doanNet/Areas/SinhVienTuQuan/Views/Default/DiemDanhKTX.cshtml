@@ -1,0 +1,297 @@
+﻿
+@{
+    ViewBag.Title = "DiemDanhKTX";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" rel="stylesheet">
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1050;
+        overflow: hidden;
+        outline: 0;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        max-width: 80%; /* Đặt độ rộng tối đa */
+        margin: 1.75rem auto;
+    }
+
+    .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0,0,0,.2);
+        border-radius: .3rem;
+        outline: 0;
+    }
+
+    .modal-open {
+        overflow: hidden;
+    }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1040;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.5);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .select-container {
+        position: relative;
+        text-align: right;
+    }
+
+        .select-container select {
+            position: absolute;
+            right: 0;
+        }
+
+    .content {
+        display: flex;
+        align-items: center;
+    }
+
+    h8, p {
+        margin: 0;
+    }
+
+    .container-fluid {
+        position: relative;
+    }
+
+    .fa-solid.fa-arrow-right {
+        margin-left: auto;
+    }
+</style>
+<h6 style="font-weight: bold">ĐIỂM DANH KÝ TÚC XÁ</h6>
+<div class="select-container">
+    <select name="tang" id="tang">
+        <option value="0" disabled selected>Tầng</option>
+        @foreach (var Floor in ViewBag.allFloor)
+        {
+
+            <option value="@Floor">Tầng @Floor</option>
+        }
+    </select>
+    <script>
+        $(document).ready(() => {
+            if (sessionStorage.getItem("NowPickFloor")) {
+                $('#tang').val(sessionStorage.getItem("NowPickFloor")); // Change to 'option2' (you can change this value)
+
+                // Optionally, trigger the change event to invoke any change event handlers
+                $('#tang').change(); // Trigger the change event
+            }
+        })
+        $('#tang').change(function () {
+        var selectedValue = $(this).val();
+
+        // Construct the URL using Url.Action with the parameter 'tang'
+        var url = '@Url.Action("DiemDanhKTX", "Default", new { tang = "tempValue" })';
+
+        // Replace 'tempValue' with the actual selected value
+        url = url.replace('tempValue', selectedValue);
+
+        // Redirect to the constructed URL
+        window.location.href = url;
+        sessionStorage.setItem("NowPickFloor",selectedValue)
+        });
+    </script>
+</div>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AttendanceAPI.js")
+
+<script>
+    async function showModal(id, name) {
+        const IntroHTML = `Điểm danh phòng - ${name}`
+        $(".modal_heading").text(IntroHTML);
+        var myModal = new bootstrap.Modal(document.getElementById('ThemSinhVien'));
+        const SinhVienData = await getAllSinhVienByRoom(id);
+        let htmls = ``;
+        SinhVienData.forEach(async (sinhvien) => {
+            htmls += ` <div class="row check_box_container" id=${sinhvien.IDSinhVien} style="padding: 10px">
+                            <div class="col-md-6 ps-5">
+                                <h6 class="mb-0 font-weight-bold">${sinhvien.FullName}</h6>
+                            </div>
+                            <div class="col-md-6 pe-5">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions${sinhvien.IDSinhVien}" id="inlineRadio1${sinhvien.IDSinhVien}" value="0" onclick="khongphep(${sinhvien.IDSinhVien})">
+                                    <label class="form-check-label" for="inlineRadio1${sinhvien.IDSinhVien}">Không phép</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions${sinhvien.IDSinhVien}" id="inlineRadio2${sinhvien.IDSinhVien}" value="0" onclick="cophep(${sinhvien.IDSinhVien})">
+                                    <label class="form-check-label" for="inlineRadio2${sinhvien.IDSinhVien}">Có phép</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions${sinhvien.IDSinhVien}" id="inlineRadio3${sinhvien.IDSinhVien}" value="1" onclick="comat(${sinhvien.IDSinhVien})">
+                                    <label class="form-check-label" for="inlineRadio3${sinhvien.IDSinhVien}">Có mặt</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row reason-input" id=${sinhvien.IDSinhVien} style="background-color:white; text-align: center; font: 12px; color: grey; display: none">
+                        <div class="col-md-3 ps-5 d-flex justify-content-center align-items-center">
+                            <label for="reason">Lý do vắng</label>
+                        </div>
+                        <div class="col-md-9 pe-5">
+                            <div class="form-group">
+                                <input type="text" class="form-control reason" id=${sinhvien.IDSinhVien} placeholder="Nhập lý do vắng" style="border: none; border-bottom: 1px solid gray;">
+                            </div>
+                        </div>
+                    </div>
+                        `
+            const AttendanceData = await getAllAttendanceBySinhVienIDNow(sinhvien.IDSinhVien);
+            if (AttendanceData) {
+                if (AttendanceData.Attendance.IsAttend == 1) {
+                    $(`#inlineRadio3${sinhvien.IDSinhVien}`).prop('checked', true);
+                    comat(sinhvien.IDSinhVien);
+                }
+                if (AttendanceData.Attendance.IsAttend == 0) {
+                    if (AttendanceData.Attendance.Reason == "") {
+                        $(`#inlineRadio1${sinhvien.IDSinhVien}`).prop('checked', true);
+                        khongphep(sinhvien.IDSinhVien);
+                    }
+                    else {
+                        $(`#inlineRadio2${sinhvien.IDSinhVien}`).prop('checked', true);
+                        document.querySelector(`.modal-body .row.check_box_container[id='${sinhvien.IDSinhVien}']`).style.backgroundColor = '#d9d9d9';
+                        document.querySelector(`.row.reason-input[id='${sinhvien.IDSinhVien}']`).style.display = 'flex';
+                        $(`.reason[id='${sinhvien.IDSinhVien}']`).val(AttendanceData.Attendance.Reason);
+                    }
+                }
+            }
+        })
+        $(".sinh_vien_container").html(htmls);
+        myModal.show();
+    }
+
+</script>
+<div class="container-fluid" style="margin-top: 40px">
+    @foreach (var room in ViewBag.RoomList)
+    {
+        <div class="content" style="border: 2px solid black; padding: 10px; cursor: pointer" onclick="showModal(@room.IDRoom,'@room.Name')">
+            <input type="checkbox" style="padding: 20px" />
+            <h8 style="font-weight: bold; padding: 20px;">@room.Name</h8>
+            <p style="background-color: blue; color: white; width: 35px; padding: 5px; margin: 0;">7/8</p>
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+    }
+
+    <div class="modal fade" id="ThemSinhVien" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 40px">
+                    <h6 class="modal_heading" style="text-align: center; font-weight: bold; padding-bottom: 20px"></h6>
+                    <div class="row align-items-center pt-4 pb-3 sinh_vien_container">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn_submmit_attendance">Xác nhận dữ liệu điểm danh</button>
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $(document).ready(() => {
+                async function HandleSubmit() {
+                    const selectedValues = [];
+                    $('.row.check_box_container').each(function () {
+                        var sinhvienId = $(this).attr('id'); // Get the row ID (sinhvien.IDSinhVien)
+                        var radioValue = $(`input[name='inlineRadioOptions${sinhvienId}']:checked`).val(); // Get the value of the checked radio button
+
+                        // Get the reason input value within the current row
+                        var reasonInputValue = $(`.reason[id='${sinhvienId}']`).val();
+                        console.log(`.reason[id='${sinhvienId}]`)
+                        // Construct an object with the row ID, radio button value, and reason input value
+                        var rowData = {
+                            IDSinhVien: sinhvienId,
+                            IsAttend: radioValue,
+                            Reason: reasonInputValue,
+                            IDAccount: sessionStorage.getItem("IDAccount") == null ? 1 : sessionStorage.getItem("IDAccount")
+                        }
+                        // Push the object to the selectedValues array
+                        selectedValues.push(rowData);
+                    });
+                    return selectedValues
+                    // Log or use the selectedValues array
+                }
+                $(".btn_submmit_attendance").click(async () => {
+                    const dataArr = await HandleSubmit();
+                    postAttendance(dataArr);
+                });
+
+            })
+
+            function showReasonInput(id) {
+                document.querySelector(`.row.reason-input[id='${id}']`).style.display = 'flex';
+            }
+
+            function hideReasonInput(id) {
+                document.querySelector(`.row.reason-input[id='${id}']`).style.display = 'none';
+            }
+
+            function comat(id) {
+                hideReasonInput(id);
+                document.querySelector(`.modal-body .row.check_box_container[id='${id}']`).style.backgroundColor = '#c6f9d7';
+            }
+
+            function cophep(id) {
+                showReasonInput(id);
+                document.querySelector(`.modal-body .row.check_box_container[id='${id}']`).style.backgroundColor = '#d9d9d9';
+            }
+            function khongphep(id) {
+                hideReasonInput(id);
+                document.querySelector(`.modal-body .row.check_box_container[id='${id}']`).style.backgroundColor = '#afadad';
+            }
+        </script>
+    </div>
+</div>
+<script>
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(3).search(newDateString, true, false).draw();
+    })
+</script>
+

@@ -1,0 +1,95 @@
+﻿body .filtering_item {
+  width: 120px;
+  height: 35px;
+  margin: 8px 4px;
+  border: solid 1px #D9D9D9;
+}
+body .filtering_place {
+  margin-top: 10px;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+}
+body .choosing_room_place {
+  flex-wrap: wrap;
+  display: flex;
+  margin-top: 12px;
+}
+body .choosing_room_item {
+  margin: 12px 12px;
+  padding: 10px 0;
+  width: 22%;
+  display: flex;
+  border: 1px solid;
+  box-shadow: 5px 10px #888888;
+}
+body .name_of_room {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C63EE;
+  text-align: center;
+}
+body .side_info {
+  margin: 0px 8px;
+}
+body .side_heading_place {
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+body .side_content_place {
+  margin-top: 4px;
+  text-align: center;
+}
+body .choosing_room_status {
+  margin-left: 7%;
+  padding: 0 10px;
+  border-left: solid 1px #D9D9D9;
+  width: 100%;
+}
+body .heading_number_tag {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+body .room_info {
+  border: solid 3px #0B42AB;
+}
+body .room_info.not_available {
+  border: solid 3px #FF0000 !important;
+}
+body .room_info.choosing {
+  border: solid 3px #35D66C !important;
+}
+body .btn_choose {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-family: 'Geneva', sans-serif;
+  font-weight: 700;
+  width: 84px;
+  height: 32px;
+  border-radius: 4px;
+  margin-top: 8px;
+  text-align: center;
+  color: white;
+  background-color: #0B42AB;
+}
+body .btn_choose.choosing {
+  background-color: #35D66C;
+}
+body .btn_choose.not_available {
+  background-color: #FF0000;
+}
+body .number_des {
+  font-weight: 700;
+  color: #0B42AB;
+  text-align: center;
+  font-size: 20px;
+}
+body .number_des.choosing {
+  color: #35D66C;
+}
+body .number_des.not_available {
+  color: #FF0000;
+}

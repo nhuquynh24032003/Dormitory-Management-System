@@ -1,0 +1,188 @@
+﻿
+
+@{
+    ViewBag.Title = "QuanLyDon";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/MenuAPI.js")
+
+<div class="container">
+    <div class="col-12 text-center" style="padding:20px">
+        <h2 class="fw-bold">DANH SÁCH MENU</h2>
+    </div>
+    <div class="filtering_place">
+        <input type="date" class="date_filtering_place" />
+    </div>
+
+    <div class="d-flex justify-content-end mb-3" style="padding: 20px;">
+        <button onclick="showModal()" class="add-menu-btn" style="background-color: darkblue; color: white; padding-right: 20px" >
+            <i class="fa-solid fa-plus " style="padding: 10px;"></i> Tạo menu mới
+        </button>
+
+    </div>
+    <script>
+        $(document).ready(() => {
+            function showModal() {
+                var myModal = new bootstrap.Modal(document.getElementById('taomenu'));
+                myModal.show();
+            }
+            $(".add-menu-btn").click(showModal);
+        })
+    </script>
+    <div class="modal fade" id="taomenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center pt-4 pb-3">
+
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Link</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control meta_place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold">Tiêu đề</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <input type="text" class="form-control menu_text_place" />
+                        </div>
+                        <div class="col-md-4 ps-5">
+                            <h6 class="mb-0 font-weight-bold"> Menu Cha</h6>
+                        </div>
+                        <div class="col-md-8 pe-5">
+                            <select name="IdFather" id="IdFather" class="IdFather-Place" style="width: 100%">
+                                <option value="0" selected>Không có</option>
+                                @foreach (var item in ViewBag.Menus)
+                                {
+                                    <option value="@item.Order">@item.TextMenu</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary submit_btn">Tạo menu</button>
+
+                </div>
+                <script>
+                    $(document).ready(() => {
+                        $(".submit_btn").click(async () => {
+                            const MenuData = {
+                                Meta: $(".meta_place").val(),
+                                FatherID: $(".IdFather-Place").val(),
+                                TextMenu: $('.menu_text_place').val(),
+                            }
+                            await postMenu(MenuData)
+                            window.location.reload();
+                        })
+                    })
+                </script>
+            </div>
+
+        </div>
+    </div>
+    <div class="row" style="padding: 20px">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr>
+                    <th scope="col">Mã menu</th>
+                    <th scope="col">Link</th>
+                    <th scope="col">Tiêu đề</th>
+                    <th scope="col">Ngày tạo</th>
+                    <th scope="col">Ẩn/hiện</th>
+                    <th scope="col">Menu Cha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Menus)
+                {
+                    @functions {
+                        // Define the formatDateTime function
+                        string formatDateTime(DateTime dateTime)
+                        {
+                            // Implement your logic here to format the datetime string
+                            // For example:
+
+                            return dateTime.ToString("dd/MM/yyyy");
+                        }
+                    }
+                    var hide = "";
+                    var FatherID = "";
+
+                    <tr>
+                        <th>@item.Order</th>
+                        <td>@item.Meta</td>
+                        <td>@item.TextMenu</td>
+                        <td>@formatDateTime(item.DateBegin)</td>
+                        <td>
+                            @if (item.Order > 6)
+                            {
+                                if (@item.Hide == 0)
+                                {
+                                    hide = "Ẩn";
+                                }
+                                else
+                                {
+                                    hide = "Hiện";
+                                }
+                                @hide
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.FatherID == null)
+                            {
+                                FatherID = "Không có";
+                            }
+                            else
+                            {
+                                foreach (var Menu in ViewBag.menus)
+                                {
+                                    if (Menu.Order == item.FatherID)
+                                    {
+                                        FatherID = Menu.TextMenu;
+                                    }
+                                }
+                            }
+                            @FatherID
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(3).search(newDateString, true, false).draw();
+    })
+</script>
+

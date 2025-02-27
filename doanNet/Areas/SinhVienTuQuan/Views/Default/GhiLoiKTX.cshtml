@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "GhiLoiKTX";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" rel="stylesheet">
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/MistakeAPI.js")
+
+<div class="container" style="padding: 20px">
+    <h3 style="font-weight: bold; padding: 20px">GHI LỖI KÝ TÚC XÁ</h3>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label" style="font-weight: bold">MSSV</label>
+        <input type="text" class="form-control MSSV_Place" id="exampleFormControlInput1" placeholder="">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput2" class="form-label" style="font-weight: bold">Tên SV</label>
+        <input type="text" class="form-control typing_name" id="exampleFormControlInput2" placeholder="" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput2" class="form-label" style="font-weight: bold">Tên phòng</label>
+        <input type="text" class="form-control typing_room" id="exampleFormControlInput2" placeholder="" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput2" class="form-label" style="font-weight: bold">Mã giường</label>
+        <select class="bedid_select" style="min-width:200px"></select>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label" style="font-weight: bold">Nội dung lỗi</label>
+        <textarea class="form-control Mistake_des_typing" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+        <div class='container_body_address_input_' style="">
+            <label class='label_name_modifier base_label_inline' style="margin-right:24px;">Minh chứng lỗi</label>
+            <label for="cover_image_upload">
+                <i class="fa fa-plus imgAdd"></i>
+            </label>
+            <p class="minhchung_place">
+
+            </p>
+            <input type="file" multiple id="cover_image_upload" accept=".png,.jpg,.jpeg" onchange="loadFile(event)" style="outline:none;border:none;width:200px;height:200px;display:none" />
+        </div>
+        <script>
+            var loadFile = function (event) {
+                $(".minhchung_place").html("");
+                for (let i = 0; i < event.target.files.length; i++) {
+                    console.log(i);
+                    var image = document.createElement('img');
+                    image.src = URL.createObjectURL(event.target.files[i]);
+                    image.id = "output";
+                    image.width = "200";
+                    image.height = "200";
+                    image.style.marginRight = "12px";
+                    image.style.marginTop = "12px";
+                    document.querySelector(".minhchung_place").appendChild(image);
+                }
+            };
+
+        </script>
+
+        <div class="col-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary w-100 m-1 submit_btn">Nộp</button>
+        </div>
+
+    </div>
+</div><!-- container -->
+<script>
+    function addOption(text, value) {
+        var select = document.querySelector(".bedid_select") // Get the <select> element
+
+        // Create a new <option> element
+        var option = document.createElement("option");
+        option.text = text;    // Set the text content
+        option.value = value;  // Set the value attribute
+
+        // Append the <option> element to the <select>
+        select.appendChild(option);
+    }
+
+    $(".MSSV_Place").blur(async () => {
+        const mssv = $(".MSSV_Place").val();
+        const SinhVienData = await findSinhVienByMSSV(mssv);
+        if (SinhVienData) {
+            $(".typing_name").val(SinhVienData.FullName);
+            $(".typing_name").attr("id", SinhVienData["IDSinhVien"]);
+
+            const RoomData = await findRoomById(SinhVienData.IDRoom);
+            $(".typing_room").val(RoomData.Name);
+            $(".typing_room").attr("id", RoomData["IDRoom"]);
+
+            for (let i = 1; i <= RoomData.RoomType; i++) {
+                addOption(`${RoomData.Name}-${i}`, `${RoomData.Name}-${i}`)
+            }
+            console.log(RoomData);
+        }
+        else {
+            $(".typing_name").val("Không tìm thấy sinh viên");
+
+        }
+    })
+    /*
+    public int IDMistake { get; set; }
+        public string MistakeDes { get; set; }
+        public System.DateTime TimeCaught { get; set; }
+        public string BedID { get; set; }
+        public int IDSinhVien { get; set; }
+        public int IDAccount { get; set; }
+        public int IDRoom { get; set; }
+    */
+    $(".submit_btn").click(() => {
+        var images = $("#cover_image_upload")[0].files
+        var imagearr = [];
+        // Loop through each selected file
+        for (var i = 0; i < images.length; i++) {
+            imagearr.push(images[i]);
+            // You can perform other actions with the file here, like uploading to server etc.
+        }
+        const MistakeData = {
+            MistakeDes: $(".Mistake_des_typing").val(),
+            IDRoom: $(".typing_room").attr("id"),
+            BedID: $('.bedid_select').val(),
+            IDSinhVien: $(".typing_name").attr("id"),
+            IDAccount: sessionStorage.getItem("IDAccount") == null ? 1 : sessionStorage.getItem("IDAccount"),
+            ImageDescription: imagearr,
+        }
+        postMistake(MistakeData)
+    })
+</script>

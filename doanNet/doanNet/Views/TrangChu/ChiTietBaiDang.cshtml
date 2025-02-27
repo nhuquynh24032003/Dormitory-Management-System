@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "ChiTietBaiDang";
+    Layout = "~/Views/Shared/layout.cshtml";
+}
+<link href="~/Content/css/Trangchu.css" rel="stylesheet" />
+
+<style>
+
+    .post-tiltle {
+        font-size: 22px;
+    }
+
+    .container {
+        font-size: 12px;
+        padding: 20px;
+    }
+
+    .post-created {
+        font-size: 70%;
+        font-style: italic;
+        color: #ccc;
+    }
+</style>
+
+@{
+    var posts = ViewBag.Posts as List<doanNet.Models.Post>;
+    @functions {
+        // Define the getOppositeColor function
+        string GetOppositeColor(string hexColor)
+        {
+            // Remove '#' if present
+            hexColor = hexColor.Replace("#", "");
+
+            // Convert hex to RGB
+            int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+            int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+            int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+
+            // Calculate relative luminance (brightness)
+            double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+
+            // Determine contrasting color based on luminance threshold
+            return luminance > 0.5 ? "#000000" : "#FFFFFF";
+        }
+    }
+}
+
+@if (posts != null)
+{
+    foreach (var post in posts)
+    {
+        List<int> categories = new List<int>();
+        List<string> categoriesName = new List<string>();
+        HashSet<int> postRelated = new HashSet<int>();
+
+        // Extracting date and time parts
+        string datePart = post.DateBegin.ToShortDateString(); // Date part
+        string timePart = post.DateBegin.ToShortTimeString(); // Time part
+        <div class="container">
+            <div class="row" style="padding-top: 50px">
+                <h1 class="fw-bold post-tiltle">@post.PostTitle</h1>
+                <div class="post-meta">
+                    <span class="post-created">TDTU, @datePart | @timePart, GMT+7 </span>
+                    <div class="row">
+                        @foreach (var categorybridge in ViewBag.categoryBridges)
+                        {
+
+                            if (categorybridge.IDPost == post.IDPost)
+                            {
+                                categories.Add(categorybridge.IDCategory);
+                            }
+                        }
+
+                        <ul class="category-list" style="display: flex; flex-wrap: nowrap; padding: 0; margin: 0; list-style-type: none;">
+                            @foreach (var category in ViewBag.Category)
+                            {
+                                foreach (int id in categories)
+                                {
+                                    if (category.IDCategory == id)
+                                    {
+                                        var oppositeColorForText = GetOppositeColor(category.ColorChip);
+                                        <li class="category-checkbox-parents" style="text-decoration:none;display:flex;align-items:center;margin:2px 0; flex-shrink: 0;">
+                                            <span class="badge badge-pill badge-primary" style="color: @(oppositeColorForText); margin-left:12px;background-color: @category.ColorChip;" id="@category.IDCategory">@category.CategoryTitle</span>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <hr class="border-2 border-dark" />
+                </div>
+                @Html.Raw(post.PostDetail)
+
+
+            </div>
+
+            @foreach (var p in ViewBag.categoryBridges)
+            {
+                foreach (int id in categories)
+                {
+
+                    if (id == p.IDCategory && p.IDPost != post.IDPost)
+                    {
+                        postRelated.Add(p.IDPost); // Add unique IDs to the HashSet
+                    }
+                }
+            }
+            <div class="row" style="padding: 50px 50px 50px 0px">
+                <h2>BÀI VIẾT LIÊN QUAN</h2>
+                <hr style="border-top: 4px solid blue;">
+            </div>
+
+
+            <div class="card-container">
+                @foreach (var p in ViewBag.allPosts)
+                {
+                    var i = 0;
+                    foreach (int id in postRelated)
+                    {
+                        if (id == p.IDPost)
+                        {
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="card">
+                                    <a class="img-card" href="@Url.Action("ChiTietBaiDang", "TrangChu", new { meta = p.Meta })">
+                                        <img src="~/Content/upload/img/news/@p.PostImage" />
+                                    </a>
+                                    <div class="card-content">
+                                        <h4 class="card-title">
+                                            <a href="@Url.Action("ChiTietBaiDang", "TrangChu", new { meta = p.Meta })">
+                                                @post.PostTitle
+                                            </a>
+                                        </h4>
+                                        <div id="someDiv">
+                                            <p class="">
+                                                @Html.Raw(p.PostDetail)
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-read-more">
+                                        <a href="@Url.Action("ChiTietBaiDang", "TrangChu", new { meta = p.Meta })" class="btn btn-link btn-block">
+                                            <!-- Link content -->
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            i++;
+                        }
+                    }
+                }
+            </div>
+
+        </div>
+
+    }
+
+}
+else
+{
+    <p>No posts found.</p>
+}

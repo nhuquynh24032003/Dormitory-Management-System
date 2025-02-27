@@ -1,0 +1,336 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachHopDongTheoThang";
+    Layout = "~/Views/Shared/layoutteacher.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/LogAPI.js")
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH HOÁ ĐƠN THÁNG 3-2024</h2>
+        </div>
+    </div>
+    <div class="filtering_place">
+        <input type="date" class="date_filtering_place" />
+        <select class="status" id="status">
+            <option value="0" disabled selected>Trạng thái</option>
+            <option value="1">Chưa thanh toán</option>
+            <option value="2">Đã thanh toán</option>
+        </select>
+        <select name="tang" id="tang">
+            <option value="0" disabled selected>Tầng</option>
+            @foreach (var Floor in ViewBag.allFloor)
+            {
+
+                <option value="@Floor">Tầng @Floor</option>
+            }
+        </select>
+    </div>
+
+    <div class="modal fade" id="XacNhanThanhToan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 style="font-weight: bold; color: blue; text-align: center">TRƯỜNG ĐẠI HỌC TÔN ĐỨC THẮNG <br /> KÝ TÚC XÁ</h6>
+                    <div class="row">
+                        <h6 style="font-weight: bold; text-align: center" class="tittle-form"> </h6>
+                    </div>
+                    <table class="table" style="width:500px;margin: auto;height:300px">
+                        <tr>
+                            <th scope="row" style="text-align: center; vertical-align: middle;">MSSV:</th>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <input type="text" class="MSSV_Place" style="padding:4px" />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" style="text-align: center; vertical-align: middle;">Họ và tên Sinh Viên:  </th>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <input type="text" class="typing_name" style="padding:4px" disabled />
+                            </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" style="text-align: center;  vertical-align: middle;">Số tiền đóng:  </th>
+                            <td style="text-align: center; vertical-align: middle;">
+                                <input type="number" style="padding:4px;width:100%" class="money_place" />
+                            </td>
+                            <td style="text-align: center; vertical-align: middle;">VNĐ</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+                <script>
+                    $(document).ready(() => {
+                        $(".MSSV_Place").blur(async () => {
+                            const mssv = $(".MSSV_Place").val();
+                            const SinhVienData = await findSinhVienByMSSV(mssv);
+                            if (SinhVienData) {
+                                $(".typing_name").val(SinhVienData.FullName);
+                                $(".typing_name").attr("id", SinhVienData["IDSinhVien"]);
+                            }
+                            else {
+                                $(".typing_name").val("Không tìm thấy sinh viên");
+                            }
+                        })
+
+                    })
+
+                </script>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary submit_btn">Xác nhận thanh toán</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function showModelXacNhanThanhToan(IDFee, Name, roomName) {
+            var myModal = new bootstrap.Modal(document.getElementById('XacNhanThanhToan'));
+            const tittle = `XÁC NHẬN THANH TOÁN <br /> ${Name} <br /> Phòng : ${roomName}`
+            $(".tittle-form").html(tittle);
+            $(".submit_btn").click(async () => {
+                const LogData = {
+                    Quantity: $(".money_place").val(),
+                    FeeID: IDFee,
+                    IDSinhVien: $(".typing_name").attr("id"),
+                }
+                await AddingLog(LogData)
+                myModal.hide();
+            })
+            myModal.show();
+        }
+     
+    </script>
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr>
+                    <th scope="col">Tên phòng</th>
+                    <th scope="col">Tên phí</th>
+                    <th scope="col">Chi tiết phí</th>
+                    <th scope="col">Tổng Chi Phí</th>
+                    <th scope="col">Hạn bắt đầu thanh toán</th>
+                    <th scope="col">Hạn chót thanh toán</th>
+                    <th scope="col">Đánh dấu thanh toán</th>
+                    <th scope="col">Tình trạng thanh toán</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+
+                @foreach (var item in ViewBag.Fees)
+                {
+                    @functions {
+                        // Define the formatDateTime function
+                        string formatDateTime(DateTime dateTime)
+                        {
+                            // Implement your logic here to format the datetime string
+                            // For example:
+
+                            return dateTime.ToString("dd/MM/yyyy");
+                        }
+                    }
+
+                    var roomName = "";
+                    var dateEnd = item.DateEnd;
+                <tr>
+                    <th>
+                        @foreach (var room in ViewBag.rooms)
+                        {
+                            if (room.IDRoom == item.IDRoom)
+                            {
+                                roomName = room.Name;
+                            }
+                        }
+                        @roomName
+                    </th>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+
+                    <td>@MyHelper.FormatVND(@item.Quantity)</td>
+                    <td>@item.DateStart</td>
+                    <td>@formatDateTime(item.DateEnd)</td>
+
+
+                    <td style="text-align: center">
+                        @if (item.Status == 0)
+                        {
+                            <i class="fa-regular fa-square" onclick="showModelXacNhanThanhToan(@item.IDFee,`@item.Description`,`@roomName`)"></i>
+
+                        }
+                        else
+                        {
+                            <i class="fa-regular fa-square-check"></i>
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.Status == 0)
+                        {
+                            <ul id="paymentStatus" class="red-dots">
+                                <li>Chưa thanh toán</li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul id="paymentStatus" class="green-dots">
+                                <li>Đã thanh toán</li>
+                            </ul>
+                        }
+
+                    </td>
+
+                </tr>
+                }
+
+
+            </tbody>
+        </table>
+        <div class="modal fade" id="ChiTietSuDungDienNuoc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6 style="font-weight: bold; color: blue; text-align: center">CHI TIẾT CHI PHÍ PHÒNG - Tháng 03/2024</h6>
+                        <div class="row">
+                            <h6 style="font-weight: bold; text-align: center">Phòng: H027</h6>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th scope="row">Giá phòng</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số điện</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số nước</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Giá tiền 1kwh điện</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Giá tiền 1 lít nước</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tổng tiền nước</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tổng tiền điện</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Chi phí khác</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tổng tiền thanh toán</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Hạn chót thanh toán</th>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Ngày xuất hoá đơn</th>
+                                <td>text</td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal fade" id="HoaDon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+    function togglePaymentStatus() {
+        var checkbox = document.getElementById("paymentCheckbox");
+        var statusList = document.getElementById("paymentStatus");
+
+        if (checkbox.checked) {
+            statusList.className = "green-dots";
+            statusList.innerHTML = "<li>Đã thanh toán</li>";
+        } else {
+            statusList.className = "red-dots";
+            statusList.innerHTML = "<li>Chưa thanh toán</li>";
+        }
+    }
+
+    $('.date_filtering_place').on('change', function (e) {
+        var dateVal = $(this).val();
+        var regex = /\b(\d{4})-(\d{2})-(\d{2})\b/;
+
+        // Check if the dateVal matches the regex pattern
+        var match = dateVal.match(regex);
+
+        if (match) {
+            // Extract year, month, and day from the matched groups
+            var year = match[1];
+            var month = match[2];
+            var day = match[3];
+
+            // Construct the new date string in the DD-MM-YYYY format
+            var newDateString = day + "/" + month + "/" + year;
+
+        } else {
+            console.log("Invalid date format.");
+        }
+        //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+        table.column(5).search(newDateString, true, false).draw();
+    })
+    $('.status').on('change', function (e) {
+        var statusval = $(this).val();
+        if (statusval == 1) {
+            //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+            table.column(7).search("Chưa thanh toán").draw();
+
+        }
+        if (statusval == 2) {
+            //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+            table.column(7).search("Đã thanh toán").draw();
+        }
+
+    })
+    $(document).ready(() => {
+        $('#tang').on('change', function (e) {
+            var tangVal = $(this).val();
+            $('#tang').val(tangVal)
+            //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+            var regex = '^.{1}' + tangVal + '.*$';
+            table.column(0).search(regex, true, false).draw();
+        })
+    })
+</script>

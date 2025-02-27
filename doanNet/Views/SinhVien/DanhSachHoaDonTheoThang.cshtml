@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachHopDongTheoThang";
+    Layout = "~/Views/Shared/layoutstudent.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js" crossorigin="anonymous"></script>
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/FeeAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/AccountAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/SinhVienAPI.js")
+@Scripts.Render("~/Areas/admin/Content/Script/JSAPI/RoomAPI.js")
+
+<link rel="stylesheet" type="text/css" href="~/Areas/admin/Content/CSS/GiaoVien.css">
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center" style="padding:20px">
+            <h2 style="font-weight: bold">DANH SÁCH HOÁ ĐƠN </h2>
+        </div>
+    </div>
+    <div class="filtering_place">
+        <select name="tang" id="tang">
+            <option value="0" disabled selected>Tầng</option>
+            @foreach (var Floor in ViewBag.allFloor)
+            {
+
+                <option value="@Floor">Tầng @Floor</option>
+            }
+        </select>
+        <script>
+            $(document).ready(() => {
+                $('#tang').on('change', function (e) {
+                    var tangVal = $(this).val();
+                    $('#tang').val(tangVal)
+                    //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+                    var regex = '^.{1}' + tangVal + '.*$';
+                    table.column(0).search(regex, true, false).draw();
+                })
+            })
+        </script>
+    </div>
+
+    <div class="row">
+        <table class="table" id="datatableform">
+            <thead>
+                <tr>
+                    <th scope="col">Tên phòng</th>
+                    <th scope="col">Tên phí</th>
+                    <th scope="col">Chi tiết phí</th>
+                    <th scope="col">Tổng Chi Phí</th>
+                    <th scope="col">Hạn bắt đầu thanh toán</th>
+                    <th scope="col">Hạn chót thanh toán</th>
+                    <th scope="col">Tình trạng thanh toán</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <script>
+            $(document).ready(async () => {
+                function formatDateTime(datetimeString) {
+                    var dateTime = new Date(datetimeString);
+                    var formattedDate = dateTime.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    return formattedDate + ' ' ;
+                }
+                async function renderFeeByStudent(FeeDataToRender) {
+                    let htmls = ``;;
+                    let table = new DataTable('#datatableform');
+                    table.clear();
+
+                    FeeDataToRender.forEach(async (fee) => {
+                        let RoomInfo = await findRoomById(fee.IDRoom);
+                        htmls = `
+                        <tr>
+                            <td>${RoomInfo.Name}</td>
+                            <td>${fee.Name}</td>
+                            <td>${fee.Description}</td>
+                            <td>${fee.Quantity}</td>
+                            <td>${formatDateTime(fee.DateStart)}</td>
+                            <td>${formatDateTime(fee.DateEnd)}</td>
+                            <td>${fee.status == 1 ? '<ul id="paymentStatus" class="red-dots"> <li> Chưa thanh toán</li></ul>' : '<ul id="paymentStatus" class="green-dots"><li> Đã thanh toán</li></ul >'}</td>
+                        `
+                        table.row.add($(htmls).get(0));
+                        table.draw();
+                    })
+                    console.log(FeeDataToRender)
+                };
+
+
+            if (!sessionStorage.getItem("IDAccount")) {
+                window.location.href = "@Url.Action("DangNhapSinhVien", "TrangChu")"
+            }   
+            else {
+                const IDAccount = sessionStorage.getItem("IDAccount")
+                let AccountInfo = await getAccountByID(IDAccount)
+                const IDSinhVien = AccountInfo.IDSinhVien
+                let FeeInfo = await getFeeBySinhVienID(IDSinhVien);
+                console.log(FeeInfo)
+                renderFeeByStudent(FeeInfo);    
+            }
+          })
+        </script>
+
+    </div>  
+
+</div>
